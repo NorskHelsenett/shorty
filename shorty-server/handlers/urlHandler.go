@@ -94,7 +94,7 @@ func Redirect(rdb *redis.Client) http.HandlerFunc {
 func DeleteRedirect(rdb *redis.Client) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		fmt.Println("deleteRedirect called")
+		rlog.Debug("DeleteRedirect called")
 
 		isAdmin, _ := r.Context().Value(middleware.IsAdminKey).(bool)
 		isOwner, _ := r.Context().Value(middleware.IsOwnerKey).(bool)

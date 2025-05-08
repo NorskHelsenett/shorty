@@ -44,7 +44,7 @@ func GenerateQRCode(rdb *redis.Client) http.HandlerFunc {
 
 		params := mux.Vars(r)
 		id := params["id"]
-		rlog.Info("GenerateQRCode", rlog.Any("id", id))
+		rlog.Debug("GenerateQRCode", rlog.Any("id", id))
 
 		path, err := redisdb.GetURL(rdb, id)
 		shorturl := path

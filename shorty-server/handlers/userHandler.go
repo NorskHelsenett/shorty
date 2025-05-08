@@ -37,7 +37,7 @@ func AddUserRedirect(rdb *redis.Client) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		isAdmin := r.Context().Value(middleware.IsAdminKey).(bool)
-		rlog.Info("1. AddUserRedirect", rlog.Any("isAdmin", isAdmin))
+		rlog.Debug("AddUserRedirect", rlog.Any("isAdmin", isAdmin))
 
 		if !isAdmin {
 			http.Error(w, "Forbidden: Only admin users can perform this action", http.StatusForbidden)
@@ -239,7 +239,7 @@ func DeleteUserRedirect(rdb *redis.Client) http.HandlerFunc {
 func CheckUserEmailRedirect(rdb *redis.Client) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		isAdmin := r.Context().Value(middleware.IsAdminKey).(bool)
-		rlog.Info("AddUserRedirect", rlog.Any("isAdmin", isAdmin))
+		rlog.Debug("AddUserRedirect", rlog.Any("isAdmin", isAdmin))
 
 		if !isAdmin {
 			http.Error(w, "Forbidden: Only admin users can perform this action", http.StatusForbidden)
