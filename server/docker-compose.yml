@@ -1,0 +1,79 @@
+services:
+  dex:
+    image: bitnami/dex:2
+    restart: always
+    volumes:
+      - ./data/dex-config-default.yaml:/configs/dex-config-default.yaml
+      - ./data/dex/dbs:/dbs
+    command: serve /configs/dex-config-default.yaml
+    depends_on:
+      init-dex-db:
+        condition: service_completed_successfully
+      openldap:
+        condition: service_started
+    links:
+      - openldap
+    ports:
+      - "5556:5556" # dex HTTP
+      - "5557:5557" # gRPC API
+    networks:
+      default:
+        aliases:
+          - dex.localtest.me
+
+  openldap:
+    image: osixia/openldap:1.5.0
+    # Copying is required because the entrypoint modifies the *.ldif files.
+    # For verbose output, use:  command: ["--copy-service", "--loglevel", "debug"]
+    command: ["--copy-service"]
+    environment:
+      # Required if using LDAPS:
+      LDAP_TLS_VERIFY_CLIENT: try
+      LDAP_ORGANISATION: "Shorty by NHN"
+      LDAP_DOMAIN: shorty.dev
+      LDAP_READONLY_USER_USERNAME: readuser
+      LDAP_READONLY_USER_PASSWORD: read
+    volumes:
+      - type: bind
+        source: ./data/dex/config-ldap.ldif
+        target: /configs
+    ports:
+      - "489:389" # LDAP
+
+  init-dex-db:
+    image: busybox
+    volumes:
+      - ./data/dex/dbs:/dbs
+    entrypoint:
+      [
+        "sh",
+        "-c",
+        "touch /dbs/dex.db && chmod 766 /dbs/dex.db && chmod 777 /dbs && echo 'dex.db file created.'",
+      ]
+    restart: "no"
+
+  redis:
+    image: redis:7.4-alpine
+    container_name: redis_shorty
+    ports:
+      - 6379:6379
+    volumes:
+      - ./data/redis/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./data/redis/data:/data
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+
+  server:
+    build: .
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=S3cret!
+      - OIDC_PROVIDER_URL=http://dex.localtest.me:5556/dex
+      - SKIPISSUERCHECK=true
+      - INSECURE_SKIP_SIGNATURE_CHECK=true
+      - NO_TLS=True
+      - ALLOW_ORIGINS=http://localhost:5173;http://localhost:5174
+    ports:
+      - "8880:8880"
+    depends_on:
+      - redis

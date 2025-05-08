@@ -1,0 +1,19 @@
+.header-container {
+  /* display: flex; */
+  /* flex-direction: column; */
+  text-align: center;
+  margin-top: 60px;
+  margin-bottom: 65px;
+  font-size: 30px;
+  /* justify-content: center; */
+  /* align-items: center; */
+  color: #015945;
+}
+
+
+.notAdmin {
+  color: #721c24;
+  font-size: 20px;
+  background-color: #f8d7da;
+  border: 1px solid red; 
+}

@@ -1,0 +1,142 @@
+html {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  font-family: Arial, Helvetica, sans-serif;
+  height: 100%;
+  width: 100%;
+  background-color: var(--background-color);
+  
+}
+
+button {
+  background-color: #7BEFB2;
+  color: black;
+  font-size: 20px;
+  box-shadow: 0 8px 12px rgba(10, 10, 10, 0.2);
+  transition: all 0.3s ease;
+  padding: 5px 10px;
+  border-radius: 15px;
+  border: none;
+}
+
+button:hover {
+  /* background-color: #02A67F; Hvises ikke */
+  box-shadow: 0 8px 12px rgba(253, 252, 252, 0.2);
+  transform: scale(1.05);
+}
+
+i {
+  color: black;
+  font-size: 1.5rem;
+  font-weight: bolder;
+}
+
+
+.info-panel {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.warning {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid red; 
+  height: 25px;
+  align-items: center;
+  display: flex; 
+  justify-content: center;
+}
+
+.success {
+  background-color: #d4edda;
+  color: #155724;
+  height: 25px;
+  align-items: center;
+  display: flex; 
+  justify-content: center;
+}
+
+:disabled {
+  background-color: transparent;
+  color: transparent;
+}
+
+
+input.error-border {
+  border: 2px solid red;
+}
+
+input {
+  font-size: large;
+  height: 25px;
+  border: none;
+}
+
+input::placeholder {
+  color: #247360;
+}
+
+
+
+.nav-button{
+  margin-right: 10px;
+}
+
+
+.login-button-container {
+  margin-top: 80px;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  justify-content: center; 
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.image-container {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  width: 100px;
+  height: auto;
+}
+
+.image-conatiner img {
+  width: 100px;
+  cursor: pointer;
+}
+
+.access_denied_title{
+  margin-bottom: 100px;
+  text-align: center;
+}
+
+.center {
+  margin-top: 80px;
+  width: 100%;
+  padding: 10px;
+}
+
+.infoText {
+  color: var(--info-text-color);
+  margin-bottom: 2px;
+}
+
+.textCenter {
+  text-align: center;
+}
+
+.border {
+  border:0.1rem  var( --dark-green);
+  border-radius: 12px;
+  border-style: groove;
+}

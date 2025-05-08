@@ -1,0 +1,12 @@
+/* .action-cell {
+  border: none;
+  padding: 8px;
+  background-color: transparent;
+  display: flex;
+} */
+
+.cell-breaweWord {
+  word-wrap: break-word;
+  max-width: 600px;
+  min-width: 600px;
+}

@@ -1,0 +1,43 @@
+
+.list-item-admin-emails {
+    width: 100%;
+    margin: 3px auto;
+    padding: 10px; 
+    max-width: 900px;
+    display: flex;
+    flex-direction: row;
+    column-gap: 0.5rem; 
+    align-items: center;
+    justify-content: space-between; 
+    color: var(--primary-text-color);
+} 
+
+.list-email-box{
+    width: 550px;
+    justify-content: center; 
+    margin-top: 20px;
+}
+
+.list-item-email {
+    min-width: 150px;
+    flex-shrink: 1;
+  }
+  
+.list-item-email-actions {
+    flex-grow: 0;
+    flex-shrink: 0;
+    column-gap: 4px; 
+}
+
+
+.list-item-admin-emails:hover {
+    background-color: #015945;;
+    color: white;
+    box-shadow: 0 3px 8px #000203;
+    border-radius: 6px;
+}
+
+  
+.list-item-admin-emails:hover button:hover {
+    background-color: white;
+}

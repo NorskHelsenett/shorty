@@ -1,0 +1,49 @@
+.url-generator-container {
+  padding: 20px;
+  text-align: center;
+}
+
+
+
+.inline-container {
+  display: flex; /* side stiller*/
+  align-items: center; /* sentrer raden */
+  gap: 10px;
+  /* gir mellomrom mellom elementene */
+  font-size: 20px;
+  /* padding: 3%; */
+  color: var(--primary-text-color);
+}
+
+input {
+  border-radius: 6px; /* Gir hjørnene en liten avrunding */
+  width: 580px;
+  /* background-color: #F1F2F2; */
+  background-color: #C4F2DA;
+}
+
+.pil {
+  color: #015945;
+}
+
+.inputPath {
+  width: 90px;
+}
+
+
+.clearField-container button {
+    display: flex;
+    margin-left: auto;
+    align-items: center;
+  }
+
+.clearField-container info-panel-container {
+  flex-grow: 1;
+}
+
+form {
+  padding: 0px;
+}
+
+
+

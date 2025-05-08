@@ -1,0 +1,78 @@
+# People
+dn: ou=People,dc=shorty,dc=dev
+objectClass: organizationalUnit
+ou: People
+
+# users
+dn: cn=dev1,ou=People,dc=shorty,dc=dev
+objectClass: person
+objectClass: inetOrgPerson
+sn: Johnsen
+cn: Johnny Johnsen
+description: Utvikler1
+mail: dev1@shorty.dev
+userpassword: Hemmelig
+
+dn: cn=dev2,ou=People,dc=shorty,dc=dev
+objectClass: person
+objectClass: inetOrgPerson
+sn: Knut
+cn: Hoppalong Knut
+description: Utvikler2
+mail: dev2@shorty.dev
+userpassword: Hemmelig
+
+dn: cn=adminread,ou=People,dc=shorty,dc=dev
+objectClass: person
+objectClass: inetOrgPerson
+sn: Klorin
+cn: Balle Klorin
+description: Administrator med lesetilgang
+mail: readadmin@shorty.dev
+userpassword: Hemmelig
+
+dn: cn=havard,ou=People,dc=shorty,dc=dev
+objectClass: person
+objectClass: inetOrgPerson
+sn: Steinbrækken
+cn: Kåre Steinbrækken
+description: Superduper admin
+displayName: Kåre Steinbrækken
+mail: superadmin@shorty.dev
+userpassword: Hemmelig
+
+
+# Group definitions.
+dn: ou=Groups,dc=shorty,dc=dev
+objectClass: organizationalUnit
+ou: Groups
+
+# Groups
+dn: cn=adminsread,ou=Groups,dc=shorty,dc=dev
+objectClass: groupOfNames
+cn: AdminRead
+member: cn=adminread,ou=People,dc=shorty,dc=dev
+
+dn: cn=developers,ou=Groups,dc=shorty,dc=dev
+objectClass: groupOfNames
+cn: Developers
+member: cn=dev1,ou=People,dc=shorty,dc=dev
+member: cn=dev2,ou=People,dc=shorty,dc=dev
+
+dn: cn=shpdev,ou=Groups,dc=shorty,dc=dev
+objectClass: groupOfNames
+cn: R-T1-SDI-SHP-Plattform-Admin
+member: cn=dev1,ou=People,dc=shorty,dc=dev
+
+dn: cn=internal,ou=Groups,dc=shorty,dc=dev
+objectClass: groupOfNames
+cn: R-T1-Internal-Accounts
+member: cn=dev1,ou=People,dc=shorty,dc=dev
+member: cn=dev2,ou=People,dc=shorty,dc=dev
+member: cn=adminread,ou=People,dc=shorty,dc=dev
+member: cn=havard,ou=People,dc=shorty,dc=dev
+
+dn: cn=superadmins,ou=Groups,dc=shorty,dc=dev
+objectClass: groupOfNames
+cn: A-T1-SDI-DevOps-Operators
+member: cn=havard,ou=People,dc=shorty,dc=dev

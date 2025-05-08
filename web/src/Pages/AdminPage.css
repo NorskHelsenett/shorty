@@ -1,0 +1,58 @@
+form {
+padding: 20px;
+/* background-color: #f9f9f9; */
+}
+
+/* .admin-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  
+} */
+
+.admin-form-container{
+    text-align: center;
+    padding: 50px;
+}
+
+.admin
+
+.warning {
+    color: red;
+}
+
+/* form input, 
+form button {
+  display: block; /* Sett input og knappen som block-elementer */
+
+
+form button {
+    float: right;
+}
+
+.input-button-wrapper {
+  display: flex; /* plassere elementer horisontalt */
+  align-items: center; /* Sentrer elementer vertikalt */
+  gap: 10px;
+}
+
+.list-center {
+  display: flex; /* Aktivere flexbox */
+  flex-direction: column; /* Vertikal stacking (hvis nødvendig) */
+  align-items: center; /* Midtstilling horisontalt */
+  /* justify-content: center; Midtstilling vertikalt */
+  text-align: center; /* Sentraljustering av tekst */
+  /* height: 100vh; Full høyde av viewporten */
+  width: 100vw; /* Full bredde av viewporten */
+  margin: 0; /* Fjerner eventuell margining */
+  /* background-color: #F1F2F2; Valgfritt for å visualisere området */
+}
+  
+.admin-title {
+  margin: 40px;
+  color:var(--primary-text-color);
+}
+
+h3 {
+  color:var(--primary-text-color);
+}

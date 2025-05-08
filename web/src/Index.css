@@ -1,0 +1,25 @@
+/* {
+    background-color: rgb(28, 27, 27); 
+    background-color: var(--background-color);
+  } */
+
+:root {
+    --background-color: white;
+    --primary-text-color: black; 
+    --heading-text-color: #155724;
+    --dark-green:#155724; 
+    --info-text-color: black;
+
+
+    /* Dark */
+    /* --primary-text-color: #7BEFB2;; 
+    --background-color:#222324;
+    --info-text-color: white;*/
+} 
+
+
+[data-theme="dark"]{
+  --primary-text-color: #155724;; 
+  --background-color:#222324;
+  --info-text-color: white;
+}

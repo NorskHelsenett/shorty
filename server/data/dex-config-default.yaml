@@ -1,0 +1,116 @@
+# DEPRECATED: use config.yaml.dist and config.dev.yaml examples in the repository root.
+# TODO: keep this until all references are updated.
+
+# The base path of dex and the external name of the OpenID Connect service.
+# This is the canonical URL that all clients MUST use to refer to dex. If a
+# path is provided, dex's HTTP service will listen at a non-root URL.
+issuer: http://dex.localtest.me:5556/dex
+
+# The storage configuration determines where dex stores its state. Supported
+# options include SQL flavors and Kubernetes third party resources.
+#
+# See the documentation (https://dexidp.io/docs/storage/) for further information.
+storage:
+  type: sqlite3
+  config:
+    file: dbs/dex.db
+
+# Configuration for the HTTP endpoints.
+web:
+  http: 0.0.0.0:5556
+  allowedOrigins:
+    - "http://localhost:8880"
+    - "http://localhost:5173"
+
+grpc:
+  addr: 0.0.0.0:5557
+
+# Options for controlling the logger.
+logger:
+  level: "debug"
+  format: "json" # can also be "text"
+
+# Default values shown below
+oauth2:
+  # grantTypes:
+  # - authorization_code
+  # - refresh_token
+  # - urn:ietf:params:oauth:grant-type:device_code
+  # - password
+  # responseTypes:
+  # - code
+  # - token
+  # - id_token
+  skipApprovalScreen: true
+  responseTypes: ["code", "token", "id_token"]
+enablePasswordDB: true
+staticPasswords:
+  - email: test@example.com
+    hash: $2a$12$.9k60cPq0Ss4jpm.TNqw0.hoBzh0EKAAvMNmteL/npigLxPTQ1q4a
+    username: "test_user"
+    user_id: 1234
+  - email: example@example.com
+    hash: $2a$12$3hWTQtvTQkZlUvc7I3taquS/vG9LWWfciowKR71OWeJYztJlVuj7q
+    username: "example_user"
+    user_id: 4321
+
+staticClients:
+  # Frontend
+  - id: shortyfront
+    name: shortyfront
+    redirectURIs:
+      - "http://localhost:5173"
+    # secret: ZXhkbXBsZS1hcHAtc2VdcmV0
+    public: true
+    scopes: [openid profile email groups]
+  - id: shorty
+    name: shorty
+    redirectURIs:
+      - "http://localhost:8880"
+    secret: ZXhkbXBsZS1hcHAtc2VdcmV0
+    public: true
+    scopes: [openid profile email groups]
+# User Auth registry
+connectors:
+  - type: mockCallback
+    id: mock
+    name: Example
+  - type: ldap
+    name: OpenLDAP
+    id: ldap
+    config:
+      host: openldap:389
+      insecureNoSSL: true
+
+      # This would normally be a read-only user.
+      bindDN: cn=admin,dc=shorty,dc=dev
+      bindPW: admin
+
+      usernamePrompt: Email Address
+
+      userSearch:
+        baseDN: ou=People,dc=shorty,dc=dev
+        filter: "(objectClass=person)"
+        # filter: "(|(objectClass=person)(objectClass=inetOrgPerson))"
+        username: mail
+        # "DN" (case sensitive) is a special attribute name. It indicates that
+        # this value should be taken from the entity's DN not an attribute on
+        # the entity.
+        idAttr: DN
+        emailAttr: mail
+        nameAttr: cn
+
+      groupSearch:
+        baseDN: ou=Groups,dc=shorty,dc=dev
+        filter: "(objectClass=groupOfNames)"
+
+        userMatchers:
+          # A user is a member of a group when their DN matches
+          # the value of a "member" attribute on the group entity.
+          - userAttr: DN
+            groupAttr: member
+
+    # The group name should be the "cn" value.
+    nameAttr: cn
+# Let dex keep a list of passwords which can be used to login to dex.
+# enablePasswordDB: true
