@@ -4,11 +4,12 @@ on:
   push:
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+*'
+
 env:
   REGISTRY: ghcr.io
-  SERVER_IMAGE_NAME: ${{ github.repository }}/server
-  WEB_IMAGE_NAME: ${{ github.repository }}/web
-  CHARTS_REGISTRY: oci://ghcr.io/${{ github.repository }}/charts
+  SERVER_IMAGE_NAME: ${{ github.repository_owner }}/${{ github.event.repository.name }}/server
+  WEB_IMAGE_NAME: ${{ github.repository_owner }}/${{ github.event.repository.name }}/web
+  CHARTS_REGISTRY: oci://ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/charts
 
 jobs:
   build-and-push-images:
@@ -21,12 +22,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Extract version from tag
-        id: get_version
+      - name: Set environment variables
         run: |
+          REPO_OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          REPO_NAME=$(echo "${{ github.event.repository.name }}" | tr '[:upper:]' '[:lower:]')
+          echo "REPO_OWNER=$REPO_OWNER" >> $GITHUB_ENV
+          echo "REPO_NAME=$REPO_NAME" >> $GITHUB_ENV
+          echo "SERVER_IMAGE=$REPO_OWNER/$REPO_NAME/server" >> $GITHUB_ENV
+          echo "WEB_IMAGE=$REPO_OWNER/$REPO_NAME/web" >> $GITHUB_ENV
+          echo "CHARTS_REG=oci://ghcr.io/$REPO_OWNER/$REPO_NAME/charts" >> $GITHUB_ENV
+          
           VERSION=${GITHUB_REF#refs/tags/v}
           echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -44,8 +51,8 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.SERVER_IMAGE_NAME }}:latest
-            ${{ env.REGISTRY }}/${{ env.SERVER_IMAGE_NAME }}:${{ env.VERSION }}
+            ${{ env.REGISTRY }}/${{ env.SERVER_IMAGE }}:latest
+            ${{ env.REGISTRY }}/${{ env.SERVER_IMAGE }}:${{ env.VERSION }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -56,8 +63,8 @@ jobs:
           file: ./web/Dockerfile
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.WEB_IMAGE_NAME }}:latest
-            ${{ env.REGISTRY }}/${{ env.WEB_IMAGE_NAME }}:${{ env.VERSION }}
+            ${{ env.REGISTRY }}/${{ env.WEB_IMAGE }}:latest
+            ${{ env.REGISTRY }}/${{ env.WEB_IMAGE }}:${{ env.VERSION }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -72,9 +79,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Extract version from tag
-        id: get_version
+      - name: Set environment variables
         run: |
+          REPO_OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          REPO_NAME=$(echo "${{ github.event.repository.name }}" | tr '[:upper:]' '[:lower:]')
+          echo "REPO_OWNER=$REPO_OWNER" >> $GITHUB_ENV
+          echo "REPO_NAME=$REPO_NAME" >> $GITHUB_ENV
+          echo "SERVER_IMAGE=$REPO_OWNER/$REPO_NAME/server" >> $GITHUB_ENV
+          echo "WEB_IMAGE=$REPO_OWNER/$REPO_NAME/web" >> $GITHUB_ENV
+          echo "CHARTS_REG=oci://ghcr.io/$REPO_OWNER/$REPO_NAME/charts" >> $GITHUB_ENV
+          
           VERSION=${GITHUB_REF#refs/tags/v}
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
@@ -105,12 +119,12 @@ jobs:
       - name: Package and push server Helm chart
         run: |
           helm package ./charts/server
-          helm push server-$VERSION.tgz ${{ env.CHARTS_REGISTRY }}
+          helm push server-$VERSION.tgz ${{ env.CHARTS_REG }}
 
       - name: Package and push web Helm chart
         run: |
           helm package ./charts/web
-          helm push web-$VERSION.tgz ${{ env.CHARTS_REGISTRY }}
+          helm push web-$VERSION.tgz ${{ env.CHARTS_REG }}
 
       - name: Create release notes
         id: release_notes
@@ -118,17 +132,17 @@ jobs:
           echo "# Release $VERSION" > release_notes.md
           echo "" >> release_notes.md
           echo "## Images" >> release_notes.md
-          echo "- Server: \`${{ env.REGISTRY }}/${{ env.SERVER_IMAGE_NAME }}:$VERSION\`" >> release_notes.md
-          echo "- Web: \`${{ env.REGISTRY }}/${{ env.WEB_IMAGE_NAME }}:$VERSION\`" >> release_notes.md
+          echo "- Server: \`${{ env.REGISTRY }}/${{ env.SERVER_IMAGE }}:$VERSION\`" >> release_notes.md
+          echo "- Web: \`${{ env.REGISTRY }}/${{ env.WEB_IMAGE }}:$VERSION\`" >> release_notes.md
           echo "" >> release_notes.md
           echo "## Helm Charts" >> release_notes.md
-          echo "- Server: \`${{ env.CHARTS_REGISTRY }}/server:$VERSION\`" >> release_notes.md
-          echo "- Web: \`${{ env.CHARTS_REGISTRY }}/web:$VERSION\`" >> release_notes.md
+          echo "- Server: \`${{ env.CHARTS_REG }}/server:$VERSION\`" >> release_notes.md
+          echo "- Web: \`${{ env.CHARTS_REG }}/web:$VERSION\`" >> release_notes.md
           echo "" >> release_notes.md
           echo "## Installation" >> release_notes.md
           echo '```bash' >> release_notes.md
-          echo "helm install shorty-server ${{ env.CHARTS_REGISTRY }}/server --version $VERSION" >> release_notes.md
-          echo "helm install shorty-web ${{ env.CHARTS_REGISTRY }}/web --version $VERSION" >> release_notes.md
+          echo "helm install shorty-server ${{ env.CHARTS_REG }}/server --version $VERSION" >> release_notes.md
+          echo "helm install shorty-web ${{ env.CHARTS_REG }}/web --version $VERSION" >> release_notes.md
           echo '```' >> release_notes.md
 
       - name: Create GitHub Release
