@@ -28,10 +28,11 @@ import (
 //		@Success		200		{object}	models.RedirectUser
 //		@Failure		403		{string}	Forbidden
 //		@Failure		401		{string}	Unauthorized
-//		@Failure		500		{string}	Failure	message
 //	 	@Failure		409		{string}	Conflict
-//		@Router			/admin/user [post]
-//		@Security		AccessToken
+//		@Failure		500		{string}	Failure	message
+
+// @Router			/admin/user [post]
+// @Security		AccessToken
 func AddUserRedirect(rdb *redis.Client) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 

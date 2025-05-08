@@ -194,7 +194,7 @@ func UpdateRedirect(rdb *redis.Client) http.HandlerFunc {
 			return
 		}
 		w.WriteHeader(http.StatusOK)
-		jsonResponse := map[string]string{"message": "Path deleted successfully"}
+		jsonResponse := map[string]string{"message": "Path updated successfully"}
 		if err := json.NewEncoder(w).Encode(jsonResponse); err != nil {
 			rlog.Error("Error encoding response: ", err)
 			return
@@ -214,6 +214,7 @@ func UpdateRedirect(rdb *redis.Client) http.HandlerFunc {
 //	@Success		200		{object}	models.Response
 //	@Failure		403	{string}	Forbidden
 //	@Failure		401	{string}	Unauthorized
+//	@Failure		409		{string}	Conflict
 //	@Failure		500	{string}	Failure	message
 //	@Router			/admin/ [post]
 //	@Security		AccessToken

@@ -116,6 +116,10 @@ paths:
           description: Forbidden
           schema:
             type: string
+        "409":
+          description: Conflict
+          schema:
+            type: string
         "500":
           description: Internal Server Error
           schema:
@@ -269,44 +273,9 @@ paths:
       tags:
       - admin user
     post:
-      consumes:
-      - application/json
-      description: adds a admin user
-      parameters:
-      - description: Query
-        in: body
-        name: query
-        required: true
-        schema:
-          $ref: '#/definitions/models.RedirectUser'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.RedirectUser'
-        "401":
-          description: Unauthorized
-          schema:
-            type: string
-        "403":
-          description: Forbidden
-          schema:
-            type: string
-        "409":
-          description: Conflict
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
+      responses: {}
       security:
       - AccessToken: []
-      summary: Add admin user
-      tags:
-      - admin user
   /admin/user/{id}:
     delete:
       consumes:
