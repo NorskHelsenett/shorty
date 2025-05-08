@@ -6,7 +6,7 @@
 ```bash
 go mod tidy
 swag init
-CGO_ENABLED=0 go build -ldflags "-w -extldflags '-static' -X shorty/main.Version=$SHORTY_VERSION" -o "dist/kort" main.go
+CGO_ENABLED=0 go build -ldflags "-w -extldflags '-static' -X github.com/NorskHelsenett/shorty/internal/main.Version=$SHORTY_VERSION" -o "dist/kort" main.go
 ```
 3. Build and upload docker image
 ```bash

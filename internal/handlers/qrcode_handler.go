@@ -7,8 +7,9 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	redisdb "shorty/redis"
 	"strings"
+
+	redisdb "github.com/NorskHelsenett/shorty/internal/redis"
 
 	"github.com/NorskHelsenett/ror/pkg/rlog"
 	"github.com/go-redis/redis/v8"
@@ -134,7 +135,7 @@ func handleQrImageCreation(input string, w http.ResponseWriter) {
 	}
 
 	// Add the NHN logo for NHN domains
-	logoPath := "/Users/annelise/Documents/shorty/media/nhnlogo.png"
+	logoPath := "/Users/annelise/Documents/github.com/NorskHelsenett/shorty/internal/media/nhnlogo.png"
 	if strings.HasSuffix(u.Host, "nhn.no") {
 		// Verify logo file exists before trying to use it
 		if _, err := os.Stat(fmt.Sprintf("file://%s", logoPath)); err == nil {

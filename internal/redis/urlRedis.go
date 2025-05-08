@@ -3,11 +3,11 @@ package redis
 import (
 	"context"
 	"errors"
-	"shorty/models"
 	"strings"
 	"time"
 
 	"github.com/NorskHelsenett/ror/pkg/rlog"
+	"github.com/NorskHelsenett/shorty/internal/models"
 	"github.com/go-redis/redis/v8"
 )
 

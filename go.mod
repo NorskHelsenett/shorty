@@ -1,4 +1,4 @@
-module shorty
+module github.com/NorskHelsenett/shorty
 
 go 1.24.0
 

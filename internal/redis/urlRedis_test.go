@@ -3,9 +3,10 @@ package redis
 import (
 	"context"
 	"reflect"
-	"shorty/models"
 	"sort"
 	"testing"
+
+	"github.com/NorskHelsenett/shorty/internal/models"
 
 	"github.com/go-redis/redis/v8"
 	"github.com/stretchr/testify/require"

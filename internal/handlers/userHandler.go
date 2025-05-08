@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"shorty/middleware"
-	"shorty/models"
-	redisdb "shorty/redis"
+
+	"github.com/NorskHelsenett/shorty/internal/middleware"
+
+	"github.com/NorskHelsenett/shorty/internal/models"
+	redisdb "github.com/NorskHelsenett/shorty/internal/redis"
 
 	emailverifier "github.com/AfterShip/email-verifier"
 	"github.com/NorskHelsenett/ror/pkg/rlog"

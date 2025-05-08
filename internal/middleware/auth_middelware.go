@@ -5,9 +5,10 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	redisdb "shorty/redis"
 	"strings"
 	"time"
+
+	redisdb "github.com/NorskHelsenett/shorty/internal/redis"
 
 	"github.com/NorskHelsenett/ror/pkg/rlog"
 	"github.com/coreos/go-oidc/v3/oidc"

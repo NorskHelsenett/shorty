@@ -6,12 +6,13 @@ import (
 	"net"
 	"net/http"
 	"net/url"
-	"shorty/metrics"
-	"shorty/middleware"
-	"shorty/models"
-	redisdb "shorty/redis"
 	"strings"
 	"time"
+
+	"github.com/NorskHelsenett/shorty/internal/metrics"
+	"github.com/NorskHelsenett/shorty/internal/middleware"
+	"github.com/NorskHelsenett/shorty/internal/models"
+	redisdb "github.com/NorskHelsenett/shorty/internal/redis"
 
 	"github.com/NorskHelsenett/ror/pkg/rlog"
 	"github.com/go-redis/redis/v8"
