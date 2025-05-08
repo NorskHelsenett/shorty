@@ -119,12 +119,12 @@ jobs:
       - name: Package and push server Helm chart
         run: |
           helm package ./charts/server
-          helm push server-$VERSION.tgz ${{ env.CHARTS_REG }}
+          helm push shorty-server-$VERSION.tgz ${{ env.CHARTS_REG }}
 
       - name: Package and push web Helm chart
         run: |
           helm package ./charts/web
-          helm push web-$VERSION.tgz ${{ env.CHARTS_REG }}
+          helm push shorty-web-$VERSION.tgz ${{ env.CHARTS_REG }}
 
       - name: Create release notes
         id: release_notes
