@@ -164,3 +164,7 @@ build/
 # VSCode
 .vscode/
 .DS_Store
+
+
+dex.db
+dump.rdb

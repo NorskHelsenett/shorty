@@ -3,8 +3,8 @@ services:
     image: bitnami/dex:2
     restart: always
     volumes:
-      - ./data/dex-config-default.yaml:/configs/dex-config-default.yaml
-      - ./data/dex/dbs:/dbs
+      - ./hacks/data/dex-config-default.yaml:/configs/dex-config-default.yaml
+      - ./hacks/data/dex/dbs:/dbs
     command: serve /configs/dex-config-default.yaml
     depends_on:
       init-dex-db:
@@ -35,7 +35,7 @@ services:
       LDAP_READONLY_USER_PASSWORD: read
     volumes:
       - type: bind
-        source: ./data/dex/config-ldap.ldif
+        source: ./hacks/data/dex/config-ldap.ldif
         target: /configs
     ports:
       - "489:389" # LDAP
@@ -43,7 +43,7 @@ services:
   init-dex-db:
     image: busybox
     volumes:
-      - ./data/dex/dbs:/dbs
+      - ./hacks/data/dex/dbs:/dbs
     entrypoint:
       [
         "sh",
@@ -58,8 +58,8 @@ services:
     ports:
       - 6379:6379
     volumes:
-      - ./data/redis/redis.conf:/usr/local/etc/redis/redis.conf
-      - ./data/redis/data:/data
+      - ./hacks/data/redis/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./hacks/data/redis/data:/data
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
 
   server:
