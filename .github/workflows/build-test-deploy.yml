@@ -15,7 +15,7 @@ jobs:
         with:
           go-version: "1.24.0" # eller din ønskede versjon
       - name: Build Go code
-        run: run cmd/shorty/main.go
+        run: go run cmd/shorty/main.go
       - name: Test Go code
         run: |
           echo testing...
