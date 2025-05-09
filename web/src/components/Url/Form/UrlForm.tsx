@@ -1,14 +1,14 @@
-import { useEffect } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { Tooltip } from 'react-tooltip';
+import { useEffect } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { Tooltip } from "react-tooltip";
 
-import './UrlForm.css';
-import { UrlData } from '../../../data/Types.ts';
-import { isValidUrl } from '../../UrlValidator.ts';
+import "./UrlForm.css";
+import { UrlData } from "../../../data/Types.ts";
+import { isValidUrl } from "../../UrlValidator.ts";
 
 interface FormProps {
   onSubmit: (data: UrlData) => void;
-  message: { type: 'success' | 'error'; message: string | null };
+  message: { type: "success" | "error"; message: string | null };
   clearMessage: () => void;
 }
 
@@ -21,8 +21,8 @@ export function UrlForm({ onSubmit, message, clearMessage }: FormProps) {
     formState: { errors, isSubmitting },
   } = useForm<UrlData>({
     defaultValues: {
-      path: '',
-      url: '',
+      path: "",
+      url: "",
     },
   });
 
@@ -35,16 +35,14 @@ export function UrlForm({ onSubmit, message, clearMessage }: FormProps) {
   }, [message, clearMessage]);
 
   const onError = () => {
-    console.log('Wrong');
+    console.log("Wrong");
   };
 
   // Validation before sending data to app.tsx
   const onSubmitHandler: SubmitHandler<UrlData> = async (data) => {
     try {
-      const formData = {
-        path: (data.path = data.path.toLocaleLowerCase()),
-        url: (data.url = data.url.toLocaleLowerCase()),
-      };
+      path: data.path = data.path.toLocaleLowerCase();
+      url: data.url = data.url.toLocaleLowerCase();
 
       const regex = /^https?:\/\//i;
 
@@ -53,17 +51,20 @@ export function UrlForm({ onSubmit, message, clearMessage }: FormProps) {
       }
 
       if (!isValidUrl(data.url)) {
-        console.log('url is not valid');
-        setError('url', { type: 'error', message: 'The provided URL is not valid. Please try again.' });
+        console.log("url is not valid");
+        setError("url", {
+          type: "error",
+          message: "The provided URL is not valid. Please try again.",
+        });
       } else {
-        console.log('Validation: OK');
+        console.log("Validation: OK");
         await onSubmit(data);
         reset();
       }
     } catch (err) {
       console.error(err);
-      message.type = 'error';
-      message.message = 'An error occurred while submitting. Please try again.';
+      message.type = "error";
+      message.message = "An error occurred while submitting. Please try again.";
     }
   };
 
@@ -76,26 +77,34 @@ export function UrlForm({ onSubmit, message, clearMessage }: FormProps) {
           <input
             aria-label="Enter path"
             placeholder=" Path"
-            {...register('path', {
-              required: 'Path is required',
+            {...register("path", {
+              required: "Path is required",
             })}
-            className={`inputPath ${errors.path ? 'error-border' : ''}`}
+            className={`inputPath ${errors.path ? "error-border" : ""}`}
             data-tooltip-id="path-tooltip"
-            data-tooltip-content={'Name your path'}
+            data-tooltip-content={"Name your path"}
           />
           <i className="pi pi-angle-double-right pil" />
           <input
             placeholder=" Url"
             aria-label="Enter url"
-            {...register('url', {
-              required: 'Long url is required.',
+            {...register("url", {
+              required: "Long url is required.",
             })}
-            className={`${errors.url ? 'error-border' : ''}`}
+            className={`${errors.url ? "error-border" : ""}`}
             data-tooltip-id="url-tooltip"
-            data-tooltip-content={'Enter the url you want to shorten'}
+            data-tooltip-content={"Enter the url you want to shorten"}
           />
-          <button disabled={isSubmitting} data-tooltip-id="add-tooltip" data-tooltip-content={'Add url shortener'}>
-            {isSubmitting ? <i className="pi pi-spinner-dotted" /> : <i className="pi pi-save" />}
+          <button
+            disabled={isSubmitting}
+            data-tooltip-id="add-tooltip"
+            data-tooltip-content={"Add url shortener"}
+          >
+            {isSubmitting ? (
+              <i className="pi pi-spinner-dotted" />
+            ) : (
+              <i className="pi pi-save" />
+            )}
           </button>
           <button
             type="button"
@@ -111,7 +120,11 @@ export function UrlForm({ onSubmit, message, clearMessage }: FormProps) {
         <div className="clearField-container">
           {errors.path && <p className="warning">{errors.path.message}</p>}
           {errors.url && <p className="warning">{errors.url.message}</p>}
-          {message.message && <p className={message.type === 'success' ? 'success' : 'warning'}>{message.message}</p>}
+          {message.message && (
+            <p className={message.type === "success" ? "success" : "warning"}>
+              {message.message}
+            </p>
+          )}
         </div>
         <div></div>
       </form>
