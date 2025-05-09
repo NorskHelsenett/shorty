@@ -1,5 +1,5 @@
-import React from 'react';
-import './headerField.css';
+import React from "react";
+import "./HeaderField.css";
 
 const Heading: React.FC = () => {
   return (
