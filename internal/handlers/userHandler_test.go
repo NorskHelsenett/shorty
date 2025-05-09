@@ -10,20 +10,13 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/go-redis/redis/v8"
-	"github.com/gorilla/mux"
-
-	// Assume these are imported from your project:
 	"github.com/NorskHelsenett/shorty/internal/middleware"
 	"github.com/NorskHelsenett/shorty/internal/models"
-	// If emailverifier is used, we assume valid emails pass.
-	// "github.com/afterlogic/emailverifier"
+	"github.com/go-redis/redis/v8"
+	"github.com/gorilla/mux"
 )
 
 // --- Fake implementations for redisdb functions ---
-// In your production code you might have:
-//   var AddAdminUser = redisdb.AddAdminUser, etc.
-// For testing, we override them.
 
 var (
 	// FakeAddAdminUser simulates adding an admin user.
@@ -60,13 +53,7 @@ var (
 	}
 )
 
-// --- Setup: overwrite the redisdb functions used in handlers ---
-// (Assuming in your production code you declare variables like AddAdminUser.)
 func init() {
-	// Overriding redisdb functions with fake ones for testing.
-	// For example, if in production you have:
-	//    var AddAdminUser = redisdb.AddAdminUser
-	// then in tests you can assign:
 	AddAdminUser = FakeAddAdminUser
 	GetAllAdminEmails = FakeGetAllAdminEmails
 	DeleteUser = FakeDeleteUser
