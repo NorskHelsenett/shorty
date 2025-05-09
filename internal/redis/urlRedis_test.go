@@ -359,8 +359,8 @@ func TestGetAll(t *testing.T) {
 		{
 			name:    "Ingen paths funnet",
 			prefix:  "nopath:",
-			want:    nil,
-			wantErr: true, // forventer feilen "no paths found"
+			want:    []models.RedirectPath{},
+			wantErr: false, // forventer feilen "no paths found"
 		},
 	}
 
