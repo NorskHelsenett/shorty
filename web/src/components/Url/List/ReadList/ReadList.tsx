@@ -3,7 +3,6 @@ import { QrData, UrlData } from "../../../../data/Types";
 import "primeicons/primeicons.css";
 import "./ReadList.css";
 import "../List.css";
-import { useAdminContext } from "../../../../Hooks/authAdminContext";
 interface ReadOnlyRowsProps {
   data: UrlData;
   index: number; // position to elements in array (data)
