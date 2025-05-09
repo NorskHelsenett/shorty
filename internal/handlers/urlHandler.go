@@ -19,6 +19,14 @@ import (
 	"github.com/gorilla/mux"
 )
 
+var (
+	URLExists          = redisdb.URLExists
+	GetURL             = redisdb.GetURL
+	Delete             = redisdb.Delete
+	UpdateOrCreatePath = redisdb.UpdateOrCreatePath
+	GetAll             = redisdb.GetAll
+)
+
 // CheckURL validates if a URL with the given ID exists
 // Returns (exists, statusCode, errorMessage)
 func CheckURL(rdb *redis.Client, id string) (bool, int, string) {
@@ -26,7 +34,7 @@ func CheckURL(rdb *redis.Client, id string) (bool, int, string) {
 		return false, http.StatusBadRequest, "Missing key parameter"
 	}
 
-	exists, err := redisdb.URLExists(rdb, id)
+	exists, err := URLExists(rdb, id)
 	if err != nil {
 		rlog.Error("Error checking if URL exists", err, rlog.Any("id", id))
 		return false, http.StatusInternalServerError, "Internal server error"
@@ -57,7 +65,7 @@ func Redirect(rdb *redis.Client) http.HandlerFunc {
 		params := mux.Vars(r)
 		id := params["id"]
 
-		path, err := redisdb.GetURL(rdb, id)
+		path, err := GetURL(rdb, id)
 
 		rlog.Info("Redirect", rlog.Any("id", id))
 
@@ -116,7 +124,7 @@ func DeleteRedirect(rdb *redis.Client) http.HandlerFunc {
 			return
 		}
 
-		success, err := redisdb.Delete(rdb, id)
+		success, err := Delete(rdb, id)
 		if !success || err != nil {
 			rlog.Error("Failed to delete URl", err)
 			http.Error(w, "Failed to delete URL", http.StatusInternalServerError)
@@ -189,7 +197,7 @@ func UpdateRedirect(rdb *redis.Client) http.HandlerFunc {
 		}
 
 		// update URL in Redis
-		_, err := redisdb.UpdateOrCreatePath(rdb, id, update.URL, lastEditedBy)
+		_, err := UpdateOrCreatePath(rdb, id, update.URL, lastEditedBy)
 		if err != nil {
 			http.Error(w, "Failed to update URL", http.StatusInternalServerError)
 			return
@@ -245,7 +253,7 @@ func AddRedirect(rdb *redis.Client) http.HandlerFunc {
 		}
 
 		// Check if path already exists
-		exists, err := redisdb.URLExists(rdb, redirect.Path)
+		exists, err := URLExists(rdb, redirect.Path)
 		if err != nil {
 			rlog.Error("Failed to check if URL exists", err)
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
@@ -278,7 +286,7 @@ func AddRedirect(rdb *redis.Client) http.HandlerFunc {
 		}
 
 		// Create the redirect
-		message, err := redisdb.UpdateOrCreatePath(rdb, redirect.Path, redirect.URL, userEmail)
+		message, err := UpdateOrCreatePath(rdb, redirect.Path, redirect.URL, userEmail)
 		if err != nil {
 			rlog.Error("Failed to create redirect", err)
 			http.Error(w, "Failed to create redirect", http.StatusInternalServerError)
@@ -317,7 +325,7 @@ func GetAllRedirects(rdb *redis.Client) http.HandlerFunc {
 		user, _ := r.Context().Value(middleware.UserKey).(string)
 		isAdmin, _ := r.Context().Value(middleware.IsAdminKey).(bool)
 
-		redirects, err := redisdb.GetAll(rdb, "path")
+		redirects, err := GetAll(rdb, "path")
 		if err != nil {
 			rlog.Error("Error in GetAll: %v", err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
