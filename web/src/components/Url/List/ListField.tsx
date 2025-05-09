@@ -1,32 +1,32 @@
-import 'primeicons/primeicons.css';
-import { Tooltip } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css';
-import { useEffect, useState } from 'react';
-import 'primereact/resources/themes/saga-blue/theme.css';
-import 'primereact/resources/primereact.min.css';
-import { Dropdown } from 'primereact/dropdown';
+import "primeicons/primeicons.css";
+import { Tooltip } from "react-tooltip";
+import "react-tooltip/dist/react-tooltip.css";
+import { useEffect, useState } from "react";
+import "primereact/resources/themes/saga-blue/theme.css";
+import "primereact/resources/primereact.min.css";
+import { Dropdown } from "primereact/dropdown";
 
-import ReadOnlyRows from './ReadList/ReadList.tsx';
-import EditableRow from './EditItem/EditableRow.tsx';
-import { SearchInput } from './SearchField/SearchInput.tsx';
-import './List.css';
-import './SearchField/SearchInput.css';
+import ReadOnlyRows from "./ReadList/ReadList.tsx";
+import EditableRow from "./EditItem/EditableRow.tsx";
+import { SearchInput } from "./SearchField/SearchInput.tsx";
+import "./List.css";
+import "./SearchField/SearchInput.css";
 
-import type { QrData, ShortenedURLs, UrlData } from '../../../data/Types.ts';
-import QrCodeViewer from './QrCodeViewer/QrCodeViewer.tsx';
-import { createPortal } from 'react-dom';
-import { SortButtons } from '../SortetButtons.tsx';
+import type { QrData, ShortenedURLs, UrlData } from "../../../data/Types.ts";
+import QrCodeViewer from "./QrCodeViewer/QrCodeViewer.tsx";
+import { createPortal } from "react-dom";
+import { SortButtons } from "../SortetButtons.tsx";
 
 interface ListProps {
   urls: ShortenedURLs;
   onItemDelete: (data: UrlData) => void;
   onItemUpdate: (data: UrlData) => void;
-  message: { type: 'success' | 'error'; message: string | null };
+  message: { type: "success" | "error"; message: string | null };
   clearMessage: () => void;
   sortedColumn: string;
-  sortOrder: 'asc' | 'desc';
+  sortOrder: "asc" | "desc";
   setSortedColumn: (column: string) => void;
-  setSortOrder: (order: 'asc' | 'desc') => void;
+  setSortOrder: (order: "asc" | "desc") => void;
 }
 
 export function ListField({
@@ -41,26 +41,30 @@ export function ListField({
   sortedColumn,
 }: ListProps) {
   // Hooks
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const [editIndex, setEditIndex] = useState<number | null>(null); // index null = show row, != null = edit row
   const [showQrCode, setShowQrCode] = useState(false);
   const [qrPath, setQrPath] = useState<QrData>({
-    path: '',
-    url: '',
+    path: "",
+    url: "",
   });
-  const [messagesByRow, setMessagesByRow] = useState<Record<number, { type: 'success' | 'error'; message: string | null }>>({});
+  const [messagesByRow, setMessagesByRow] = useState<
+    Record<number, { type: "success" | "error"; message: string | null }>
+  >({});
 
   // Variables
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const filteredUrls = urls.filter((item) => item.path.toLowerCase().includes(search.toLowerCase()));
+  const filteredUrls = urls.filter((item) =>
+    item.path.toLowerCase().includes(search.toLowerCase())
+  );
   const indexOfFirstRow = currentPage * rowsPerPage;
   const indexOfLastRow = (currentPage + 1) * rowsPerPage;
   const currentRows = filteredUrls.slice(indexOfFirstRow, indexOfLastRow);
   const rowsPerPageOptions = [
-    { id: '5', name: '5', value: 5 },
-    { id: '15', name: '15', value: 15 },
-    { id: '25', name: '25', value: 25 },
+    { id: "5", name: "5", value: 5 },
+    { id: "15", name: "15", value: 15 },
+    { id: "25", name: "25", value: 25 },
   ];
 
   // Functions
@@ -76,7 +80,11 @@ export function ListField({
     }
   };
 
-  const showMessageForRow = (rowIndex: number, type: 'success' | 'error', message: string) => {
+  const showMessageForRow = (
+    rowIndex: number,
+    type: "success" | "error",
+    message: string
+  ) => {
     setMessagesByRow((prev) => ({
       ...prev,
       [rowIndex]: { type, message },
@@ -93,25 +101,25 @@ export function ListField({
   };
 
   const handleDelete = async (path: string, rowIndex: number) => {
-    const shouldRemove = confirm('Are you sure you want to delete path ' + path + '?');
+    const shouldRemove = confirm(
+      "Are you sure you want to delete path " + path + "?"
+    );
     if (shouldRemove) {
       const urlData = urls.find((url) => url.path === path);
       if (urlData) {
         await onItemDelete(urlData);
-        showMessageForRow(rowIndex, 'success', `Path "${path}" deleted successfully!`);
+        showMessageForRow(
+          rowIndex,
+          "success",
+          `Path "${path}" deleted successfully!`
+        );
       } else {
-        console.error('URl data not found for path:', path);
-        showMessageForRow(rowIndex, 'error', `Failed to delete path: ${path}.`);
+        console.error("URl data not found for path:", path);
+        showMessageForRow(rowIndex, "error", `Failed to delete path: ${path}.`);
       }
     } else {
       handleCancel;
     }
-  };
-
-  // sends updated data to app.tsx
-  const handleUpdate = async (data: UrlData) => {
-    await onItemUpdate(data);
-    setEditIndex(null);
   };
 
   const handleSearchChange = (value: string) => {
@@ -164,7 +172,12 @@ export function ListField({
         <div className="list-box">
           <div className="sorting-buttons">
             <div className="sorting-buttons-left">
-              <SortButtons sortOrder={sortOrder} setSortOrder={setSortOrder} sortedColumn={sortedColumn} setSortedColumn={setSortedColumn} />
+              <SortButtons
+                sortOrder={sortOrder}
+                setSortOrder={setSortOrder}
+                sortedColumn={sortedColumn}
+                setSortedColumn={setSortedColumn}
+              />
             </div>
             <div className="center-text">
               <p>Total number of paths: {urls.length}</p>
@@ -180,7 +193,11 @@ export function ListField({
                       onCancel={handleCancel}
                       onUpdate={async (formData) => {
                         await onItemUpdate(formData);
-                        showMessageForRow(index, 'success', 'Path updated successfully!');
+                        showMessageForRow(
+                          index,
+                          "success",
+                          "Path updated successfully!"
+                        );
                         setEditIndex(null);
                       }}
                       message={messagesByRow[index] ?? undefined}
@@ -197,7 +214,13 @@ export function ListField({
                   />
                 )}
                 {messagesByRow[index] && (
-                  <p className={messagesByRow[index]?.type === 'success' ? 'info-panel success' : 'info-panel error'}>
+                  <p
+                    className={
+                      messagesByRow[index]?.type === "success"
+                        ? "info-panel success"
+                        : "info-panel error"
+                    }
+                  >
                     {messagesByRow[index]?.message}
                   </p>
                 )}
@@ -208,7 +231,12 @@ export function ListField({
 
           <div className="button-container">
             {urls.length > rowsPerPage ? (
-              <button onClick={prevPage} disabled={currentPage === 0} data-tooltip-id="prev-tooltip" data-tooltip-content="Previous">
+              <button
+                onClick={prevPage}
+                disabled={currentPage === 0}
+                data-tooltip-id="prev-tooltip"
+                data-tooltip-content="Previous"
+              >
                 <i className="pi pi-arrow-left"></i>
               </button>
             ) : null}
@@ -225,7 +253,12 @@ export function ListField({
               />
             </div>
             {urls.length > rowsPerPage ? (
-              <button onClick={nextPage} disabled={indexOfLastRow >= urls.length} data-tooltip-id="next-tooltip" data-tooltip-content="Next">
+              <button
+                onClick={nextPage}
+                disabled={indexOfLastRow >= urls.length}
+                data-tooltip-id="next-tooltip"
+                data-tooltip-content="Next"
+              >
                 <i className="pi pi-arrow-right"></i>
               </button>
             ) : null}
@@ -243,7 +276,16 @@ export function ListField({
         </div>
       </div>
       {/* QR Code Viewer */}
-      {showQrCode ? createPortal(<QrCodeViewer imagePath={qrPath} closeQr={handleCloseQr} isVisible={showQrCode} />, document.body) : null}
+      {showQrCode
+        ? createPortal(
+            <QrCodeViewer
+              imagePath={qrPath}
+              closeQr={handleCloseQr}
+              isVisible={showQrCode}
+            />,
+            document.body
+          )
+        : null}
     </>
   );
 }
