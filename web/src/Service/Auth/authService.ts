@@ -2,7 +2,7 @@
 import {TAuthConfig} from "react-oauth2-code-pkce"
 import * as oauth from 'oauth4webapi'
 
-const generatedstate = oauth.generateRandomState()
+const _generatedstate = oauth.generateRandomState()
 
 export const authConfig: TAuthConfig = {
     clientId: "shortyfront",
