@@ -62,7 +62,6 @@ func init() {
 
 // --- Helper: dummy context with admin flag ---
 func contextWithAdmin(isAdmin bool) context.Context {
-	// middleware.IsAdminKey should be defined in your middleware package.
 	return context.WithValue(context.Background(), middleware.IsAdminKey, isAdmin)
 }
 

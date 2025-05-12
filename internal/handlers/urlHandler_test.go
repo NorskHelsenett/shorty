@@ -90,7 +90,7 @@ var fakeUpdateOrCreatePath = func(rdb *redis.Client, id, urlStr, user string) (s
 	return "success", nil
 }
 
-// types used by GetAllRedirects – adjust according to your actual definitions.
+// types used by GetAllRedirects
 type FakeRedirectPath struct {
 	Path  string
 	URL   string
@@ -100,12 +100,6 @@ type FakeRedirectPath struct {
 // FakeGetAll simulates redisdb.GetAll.
 // Ignores the key and returns a fixed list.
 var fakeGetAll = func(rdb *redis.Client, key string) ([]models.RedirectPath, error) {
-	// Assume that models.RedirectPath is defined as follows:
-	// type RedirectPath struct {
-	//     Path  string `json:"path"`
-	//     URL   string `json:"url"`
-	//     Owner string `json:"owner"`
-	// }
 	return []models.RedirectPath{
 		{Path: "p1", URL: "https://p1.com", Owner: "user1"},
 		{Path: "p2", URL: "https://p2.com", Owner: "user2"},
@@ -286,7 +280,7 @@ func TestDeleteRedirect(t *testing.T) {
 			// Set URL variables via mux helper.
 			vars := mux.Vars(req)
 			// If the url is missing the email (id), then vars will be empty.
-			// Our test cases supply a valid URL.
+			// test cases supply a valid URL.
 			if vars == nil {
 				req = mux.SetURLVars(req, map[string]string{"id": strings.TrimPrefix(tc.url, "/admin/")})
 			}
@@ -477,7 +471,7 @@ func TestGetAllRedirects(t *testing.T) {
 
 	handler := GetAllRedirects(fakeRdb)
 
-	// For this test, we simulate a context with a user and admin status.
+	// this test simulate a context with a user and admin status.
 	req := httptest.NewRequest(http.MethodGet, "/admin/", nil)
 	req = req.WithContext(contextWithRoles(true, false, "user1"))
 	rr := httptest.NewRecorder()

@@ -71,10 +71,6 @@ func TestUpdateOrCreatePath(t *testing.T) {
 	key := "mykey"
 	newValue := "https://example.com"
 
-	// NOTE:
-	// Because UpdateOrCreatePath calls time.Now() internally,
-	// we capture a time value immediately before the HSet expectation.
-	// This may be a little fragile if the second boundary is crossed.
 	t.Run("Update success", func(t *testing.T) {
 		pathKey := "path:" + key
 
@@ -389,13 +385,12 @@ func TestGetAll(t *testing.T) {
 		fullKey := prefix + ":nopage"
 		mock.ExpectKeys(prefix + "*").SetVal([]string{fullKey})
 		mock.ExpectHGet(fullKey, "url").RedisNil()
-		// Even if createdBy is not requested (since url is missing), no further expectation.
 
 		results, err := GetAll(db, prefix)
 		if err != nil {
 			t.Fatalf("unexpected error: %v", err)
 		}
-		// Should skip the key because "url" is essential.
+
 		if len(results) != 0 {
 			t.Errorf("expected 0 results, got %d", len(results))
 		}
