@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: ncr.sky.nhn.no/nhn/kort
+  repository: ghcr.io/norskhelsenett/shorty/shorty-server
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "1.0.13"
@@ -26,15 +26,22 @@ serviceAccount:
 podAnnotations: {}
 
 podSecurityContext: 
+  runAsNonRoot: true
   fsGroup: 2000
+  runAsUser: 1001
+  runAsGroup: 1001
+  supplementalGroups: [501]
 
 securityContext: 
+  allowPrivilegeEscalation: false
+  seccompProfile:
+    type: RuntimeDefault
   capabilities:
     drop:
     - ALL
   readOnlyRootFilesystem: true
   runAsNonRoot: true
-  runAsUser: 1000
+  runAsUser: 1001
 
 service:
   type: NodePort
@@ -47,14 +54,14 @@ ingress:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: k.nhn.no
+    - host: k.test.nhn.no
       paths:
         - path: /
           pathType: ImplementationSpecific
   tls: 
     - secretName: kort-tls
       hosts:
-        - k.nhn.no
+        - k.test.nhn.no
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
