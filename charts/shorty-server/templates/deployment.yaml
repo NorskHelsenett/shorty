@@ -54,6 +54,12 @@ spec:
               {{- end }}
             - name: PORT
               value: {{ .Values.service.port | quote }}
+            {{- if .Values.api.oidcProviderURL }}
+            - name: OIDC_PROVIDER_URL
+              value: {{ .Values.api.oidcProviderURL| quote }}
+            {{- end}}
+            - name: ALLOW_ORIGINS
+              value: {{ .Values.api.allowOrigins| quote }}
           livenessProbe:
             httpGet:
               path: /health
