@@ -54,11 +54,6 @@ spec:
               {{- end }}
             - name: PORT
               value: {{ .Values.service.port | quote }}
-            - name: API-KEY
-              valueFrom:
-                secretKeyRef:
-                  name: kort-secret
-                  key: kort-api-key
           livenessProbe:
             httpGet:
               path: /health
