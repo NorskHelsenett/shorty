@@ -10,6 +10,13 @@ env:
   SERVER_IMAGE_NAME: ${{ github.repository_owner }}/${{ github.event.repository.name }}/shorty-server
   WEB_IMAGE_NAME: ${{ github.repository_owner }}/${{ github.event.repository.name }}/shorty-web
   CHARTS_REGISTRY: oci://ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/charts
+  REPO_OWNER: ""
+  REPO_NAME: ""
+  SERVER_IMAGE: ""
+  WEB_IMAGE: ""
+  CHARTS_REG: ""
+  VERSION: "invalidversion"
+
 
 jobs:
   build-and-push-images:
