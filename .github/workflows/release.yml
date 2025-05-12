@@ -110,11 +110,7 @@ jobs:
           sed -i "s/^version:.*/version: $VERSION/" charts/shorty-server/Chart.yaml
           sed -i "s/^appVersion:.*/appVersion: $VERSION/" charts/shorty-server/Chart.yaml
           sed -i "s/tag:.*/tag: $VERSION/" charts/shorty-server/values.yaml
-          
-          # Update web chart version
-          sed -i "s/^version:.*/version: $VERSION/" charts/shorty-web/Chart.yaml
-          sed -i "s/^appVersion:.*/appVersion: $VERSION/" charts/shorty-web/Chart.yaml
-          sed -i "s/tag:.*/tag: $VERSION/" charts/shorty-web/values.yaml
+
 
       - name: Login to GitHub Container Registry for Helm
         uses: docker/login-action@v3
@@ -126,9 +122,5 @@ jobs:
       - name: Package and push server Helm chart
         run: |
           helm package ./charts/shorty-server
-          helm push shorty-server-$VERSION.tgz ${{ env.CHARTS_REG }}
+          helm push shorty-$VERSION.tgz ${{ env.CHARTS_REG }}
 
-      - name: Package and push web Helm chart
-        run: |
-          helm package ./charts/shorty-web
-          helm push shorty-web-$VERSION.tgz ${{ env.CHARTS_REG }}
