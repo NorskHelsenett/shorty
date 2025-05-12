@@ -28,6 +28,8 @@ import (
 const (
 	defaultPort     = "8880"
 	defaultHostname = "localhost"
+	defaultOIDCClientID = "shortyfront"
+	defaultOIDCProviderURL = "http://dex.localtest.me:5556/dex"
 )
 
 var (
@@ -183,8 +185,8 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	viper.SetDefault("OIDC_CLIENT_ID", "shortyfront")
-	viper.SetDefault("OIDC_PROVIDER_URL", "http://dex.localtest.me:5556/dex")
+	viper.SetDefault("OIDC_CLIENT_ID", defaultOIDCClientID)
+	viper.SetDefault("OIDC_PROVIDER_URL", defaultOIDCProviderURL)
 	viper.SetDefault("SKIPISSUERCHECK", false)
 	viper.SetDefault("INSECURE_SKIP_SIGNATURE_CHECK", false)
 	viper.AutomaticEnv()

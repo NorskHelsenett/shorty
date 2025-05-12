@@ -3,7 +3,9 @@
 # Declare variables to be passed into your templates.
 
 api:
-  oidcProviderURL: ""
+  oidc:
+    providerURL: ""
+    clientId: "shortyfront"
   allowOrigins: ""
 
 replicaCount: 1
