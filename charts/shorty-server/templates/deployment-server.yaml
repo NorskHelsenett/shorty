@@ -1,41 +1,41 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "kort.fullname" . }}
+  name: {{ include "api.fullname" . }}
   labels:
-    {{- include "kort.labels" . | nindent 4 }}
+    {{- include "api.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
+  {{- if not .Values.server.autoscaling.enabled }}
+  replicas: {{ .Values.server.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "kort.selectorLabels" . | nindent 6 }}
+      {{- include "api.selectorLabels" . | nindent 6 }}-api
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
+      {{- with .Values.server.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "kort.selectorLabels" . | nindent 8 }}
+        {{- include "api.selectorLabels" . | nindent 8 }}-api
     spec:
-      {{- with .Values.imagePullSecrets }}
+      {{- with .Values.server.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "kort.serviceAccountName" . }}
+      serviceAccountName: {{ include "api.serviceAccountName" . }}
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.server.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+            {{- toYaml .Values.server.securityContext | nindent 12 }}
+          image: "{{ .Values.server.image.repository }}:{{ .Values.server.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.server.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.port }}
+              containerPort: {{ .Values.server.service.port }}
               protocol: TCP
           env:
             - name: REDIS_PASSWORD
@@ -49,11 +49,9 @@ spec:
                   name: redis-secret
                   key: redis-host
             - name: HOST
-              {{- with index .Values.ingress.hosts 0 }}
-              value: {{ .host | quote }}
-              {{- end }}
+              value: {{ .Values.api.hostname | quote }}
             - name: PORT
-              value: {{ .Values.service.port | quote }}
+              value: {{ .Values.server.service.port | quote }}
             {{- if .Values.api.oidc }}
             {{- if .Values.api.oidc.providerURL }}
             - name: OIDC_PROVIDER_URL
@@ -71,22 +69,22 @@ spec:
           livenessProbe:
             httpGet:
               path: /health
-              port: {{ .Values.service.port }}
+              port: {{ .Values.server.service.port }}
           readinessProbe:
             httpGet:
               path: /health
-              port: {{ .Values.service.port }}
+              port: {{ .Values.server.service.port }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
+            {{- toYaml .Values.server.resources | nindent 12 }}
+      {{- with .Values.server.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.server.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.server.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

@@ -1,8 +1,16 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "kort.name" -}}
+{{- define "shorty.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{- define "api.name" -}}
+{{ include "shorty.name" . }}-api
+{{- end }}
+
+{{- define "web.name" -}}
+{{ include "shorty.name" . }}-web
 {{- end }}
 
 {{/*
@@ -10,7 +18,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "kort.fullname" -}}
+{{- define "shorty.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -23,19 +31,45 @@ If release name contains chart name it will be used as a full name.
 {{- end }}
 {{- end }}
 
+{{- define "api.fullname" -}}
+{{ include "shorty.fullname" . | trunc 60 | trimSuffix "-"}}-api
+{{- end }}
+
+{{- define "web.fullname" -}}
+{{ include "shorty.fullname" . | trunc 60 | trimSuffix "-"}}-web
+{{- end }}
+
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "kort.chart" -}}
+{{- define "shorty.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "kort.labels" -}}
-helm.sh/chart: {{ include "kort.chart" . }}
-{{ include "kort.selectorLabels" . }}
+{{- define "shorty.labels" -}}
+helm.sh/chart: {{ include "shorty.chart" . }}
+{{ include "shorty.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{- define "api.labels" -}}
+helm.sh/chart: {{ include "shorty.chart" . }}
+{{ include "api.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{- define "web.labels" -}}
+helm.sh/chart: {{ include "shorty.chart" . }}
+{{ include "web.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,18 +79,37 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "kort.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "kort.name" . }}
+{{- define "shorty.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "shorty.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
+
+{{- define "api.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "shorty.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}-api
+{{- end }}
+
+{{- define "web.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "shorty.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}-web
+{{- end }}
+
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "kort.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "kort.fullname" .) .Values.serviceAccount.name }}
+{{- define "api.serviceAccountName" -}}
+{{- if .Values.server.serviceAccount.create }}
+{{- default (include "shorty.fullname" .) .Values.server.serviceAccount.name }}-api
 {{- else }}
-{{- default "default" .Values.serviceAccount.name }}
+{{- default "default" .Values.server.serviceAccount.name }}-api
+{{- end }}
+{{- end }}
+
+{{- define "web.serviceAccountName" -}}
+{{- if .Values.web.serviceAccount.create }}
+{{- default (include "shorty.fullname" .) .Values.server.serviceAccount.name }}-web
+{{- else }}
+{{- default "default" .Values.server.serviceAccount.name }}-web
 {{- end }}
 {{- end }}
