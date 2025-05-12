@@ -60,7 +60,7 @@ spec:
               value: {{ .Values.api.oidc.providerURL| quote }}
             {{- end}}
             {{- if .Values.api.oidc.clientId }}
-            - name: OIDC_CLIENT_ID"
+            - name: OIDC_CLIENT_ID
               value: {{ .Values.api.oidc.clientId| quote }}
             {{- end}}            
             {{- end}}
