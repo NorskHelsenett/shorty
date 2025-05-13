@@ -141,7 +141,7 @@ func setupRouter(rdb *redis.Client) *mux.Router {
 	r.HandleFunc("/", handlers.Redirect(rdb)).Methods("GET")
 	r.HandleFunc("", handlers.Redirect(rdb)).Methods("GET")
 
-	adminRoute := r.PathPrefix("/vr").Subrouter()
+	adminRoute := r.PathPrefix("/v1").Subrouter()
 	adminRoute.Use(middleware.AuthenticationMiddlewareWrapper(rdb))
 	adminRoute.Use(middleware.AddAdminStatusMiddlewareWrapper(rdb))
 

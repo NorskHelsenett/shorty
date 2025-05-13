@@ -40,7 +40,7 @@ var (
 //	 	@Failure		409		{string}	Conflict
 //		@Failure		500		{string}	Failure	message
 
-// @Router			/vr/user [post]
+// @Router			/v1/user [post]
 // @Security		AccessToken
 func AddUserRedirect(rdb *redis.Client) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -149,7 +149,7 @@ func AddUserRedirect(rdb *redis.Client) http.HandlerFunc {
 //	@Failure		403	{string}	Forbidden
 //	@Failure		401	{string}	Unauthorized
 //	@Failure		500	{string}	Failure	message
-//	@Router			/vr/user [get]
+//	@Router			/v1/user [get]
 //	@Security		AccessToken
 func GetAllUsersRedirect(rdb *redis.Client) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -198,7 +198,7 @@ func GetAllUsersRedirect(rdb *redis.Client) http.HandlerFunc {
 //	@Failure		403	{string}	Forbidden
 //	@Failure		401	{string}	Unauthorized
 //	@Failure		500	{string}	Failure	message
-//	@Router			/vr/user/{id} [delete]
+//	@Router			/v1/user/{id} [delete]
 //	@Security		AccessToken
 func DeleteUserRedirect(rdb *redis.Client) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {

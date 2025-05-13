@@ -1,7 +1,7 @@
 import { fetchWithToken } from "../Auth/Fetch.ts";
 import { API_URL } from "../config.ts";
 
-const urlAdminUserAddress = `${API_URL}/vr/user`;
+const urlAdminUserAddress = `${API_URL}/v1/user`;
 
 
 export async function getAdminUsers(): Promise<string[]> {
