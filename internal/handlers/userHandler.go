@@ -18,6 +18,13 @@ import (
 	"github.com/gorilla/mux"
 )
 
+var (
+	AddAdminUser      = redisdb.AddAdminUser
+	GetAllAdminEmails = redisdb.GetAllAdminEmails
+	DeleteUser        = redisdb.DeleteUser
+	AdminUserExists   = redisdb.AdminUserExists
+)
+
 // Add admin user
 //
 //		@Summary		Add admin user
@@ -86,7 +93,7 @@ func AddUserRedirect(rdb *redis.Client) http.HandlerFunc {
 
 		userID := uuid.New().String()
 
-		status, err := redisdb.AddAdminUser(rdb, userID, res.Email)
+		status, err := AddAdminUser(rdb, userID, res.Email)
 		if err != nil {
 			rlog.Error("Error: AddUser failed", err)
 			http.Error(w, "Error occurred while adding/updating user", http.StatusBadRequest)
@@ -159,7 +166,7 @@ func GetAllUsersRedirect(rdb *redis.Client) http.HandlerFunc {
 
 		defer r.Body.Close()
 
-		redirects, err := redisdb.GetAllAdminEmails(rdb)
+		redirects, err := GetAllAdminEmails(rdb)
 
 		if err != nil {
 			rlog.Error("Error reading admin emails", err)
@@ -216,7 +223,7 @@ func DeleteUserRedirect(rdb *redis.Client) http.HandlerFunc {
 			return
 		}
 
-		err := redisdb.DeleteUser(rdb, email)
+		err := DeleteUser(rdb, email)
 		if err != nil {
 			rlog.Error("DeleteUserRedirect: Failed to delete user", err)
 			if err.Error() == "email not found" {
@@ -277,7 +284,7 @@ func CheckUserEmailRedirect(rdb *redis.Client) http.HandlerFunc {
 			return
 		}
 
-		emailExists := redisdb.AdminUserExists(rdb, res.Email)
+		emailExists := AdminUserExists(rdb, res.Email)
 
 		response := map[string]interface{}{
 			"Exists": emailExists,

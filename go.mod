@@ -18,6 +18,14 @@ require (
 )
 
 require (
+	github.com/go-redis/redismock/v9 v9.2.0 // indirect
+	github.com/google/go-cmp v0.7.0 // indirect
+	github.com/onsi/gomega v1.25.0 // indirect
+	github.com/redis/go-redis/v9 v9.7.0 // indirect
+	github.com/rogpeppe/go-internal v1.13.1 // indirect
+)
+
+require (
 	dario.cat/mergo v1.0.2 // indirect
 	github.com/AfterShip/email-verifier v1.4.1
 	github.com/Azure/go-ansiterm v0.0.0-20250102033503-faa5f7b0171c // indirect

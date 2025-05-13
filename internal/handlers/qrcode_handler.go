@@ -135,10 +135,10 @@ func handleQrImageCreation(input string, w http.ResponseWriter) {
 	}
 
 	// Add the NHN logo for NHN domains
-	logoPath := "/Users/annelise/Documents/github.com/NorskHelsenett/shorty/internal/media/nhnlogo.png"
+	logoPath := "github.com/NorskHelsenett/shorty/internal/media/nhnlogo.png"
 	if strings.HasSuffix(u.Host, "nhn.no") {
 		// Verify logo file exists before trying to use it
-		if _, err := os.Stat(fmt.Sprintf("file://%s", logoPath)); err == nil {
+		if _, err := os.Stat(logoPath); err == nil {
 			opts = append(opts, standard.WithLogoSizeMultiplier(2))
 			opts = append(opts, standard.WithLogoImageFilePNG(logoPath))
 		} else {
