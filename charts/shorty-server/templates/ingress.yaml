@@ -27,7 +27,7 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ include "shorty.fullname" . }}
+                name: {{ include "api.fullname" . }}
                 port:
                   number: {{ .Values.server.service.port }}
         {{- end }}
