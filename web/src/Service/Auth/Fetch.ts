@@ -37,10 +37,7 @@
 
       const rawBody = await response.text();
 
-      const parsedJSON = JSON.parse(rawBody) as T;
       try {
-        
-        console.info("Parsed JSON:", parsedJSON);
         return JSON.parse(rawBody) as T; // returns parsed data
       } catch (jsonError) {
         console.error("Failed to parse JSON. Returning raw response body as fallback.", jsonError);
