@@ -15,11 +15,11 @@ spec:
   {{- if .Values.api.ingress.tls.enabled }}
   tls:
     - hosts:
-        -host: {{ .Values.api.hostname | quote }}
-      secretName: {{ .Values.api.ingress.tls.secretName | quote }}
+        - {{ .Values.api.hostname}}
+      secretName: {{ .Values.api.ingress.tls.secretName }}
   {{- end }}
   rules:
-    - host: {{ .Values.api.hostname | quote }}
+    - host: {{ .Values.api.hostname  }}
       http:
         paths:
         {{- if .Values.server.enabled }}
