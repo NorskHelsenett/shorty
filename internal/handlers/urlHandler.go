@@ -89,8 +89,8 @@ func Redirect(rdb *redis.Client) http.HandlerFunc {
 //
 //	@Summary	Delete redirect
 //	@Schemes
-//	@Description	delets a redirect by id
-//	@Tags			admin
+//	@Description	deletes a redirect by id
+//	@Tags			vr
 //	@Accept			application/json
 //	@Produce		application/json
 //	@Param			id	path		string	true	"Id"
@@ -98,7 +98,7 @@ func Redirect(rdb *redis.Client) http.HandlerFunc {
 //	@Failure		403	{string}	Forbidden
 //	@Failure		401	{string}	Unauthorized
 //	@Failure		500	{string}	Failure	message
-//	@Router			/admin/{id} [delete]
+//	@Router			/vr/{id} [delete]
 //	@Security		AccessToken
 func DeleteRedirect(rdb *redis.Client) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -146,7 +146,7 @@ func DeleteRedirect(rdb *redis.Client) http.HandlerFunc {
 //	@Summary	Updates redirect
 //	@Schemes
 //	@Description	Updates a redirect to given url
-//	@Tags			admin
+//	@Tags			vr
 //	@Accept			application/json
 //	@Produce		application/json
 //	@Param			query	body		models.Redirect	true	"Query"
@@ -155,7 +155,7 @@ func DeleteRedirect(rdb *redis.Client) http.HandlerFunc {
 //	@Failure		403		{string}	Forbidden
 //	@Failure		401		{string}	Unauthorized
 //	@Failure		500		{string}	Failure	message
-//	@Router			/admin/{id} [patch]
+//	@Router			/vr/{id} [patch]
 //	@Security		AccessToken
 func UpdateRedirect(rdb *redis.Client) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -216,7 +216,7 @@ func UpdateRedirect(rdb *redis.Client) http.HandlerFunc {
 //	@Summary	Add redirect
 //	@Schemes
 //	@Description	adds a redirect to url
-//	@Tags			admin
+//	@Tags			vr
 //	@Accept			application/json
 //	@Produce		application/json
 //	@Param			query	body		models.Redirect	true	"Query"
@@ -225,7 +225,7 @@ func UpdateRedirect(rdb *redis.Client) http.HandlerFunc {
 //	@Failure		401	{string}	Unauthorized
 //	@Failure		409		{string}	Conflict
 //	@Failure		500	{string}	Failure	message
-//	@Router			/admin/ [post]
+//	@Router			/vr/ [post]
 //	@Security		AccessToken
 func AddRedirect(rdb *redis.Client) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -310,14 +310,14 @@ func AddRedirect(rdb *redis.Client) http.HandlerFunc {
 //	@Summary	Get redirect
 //	@Schemes
 //	@Description	gets all redirects
-//	@Tags			admin
+//	@Tags			vr
 //	@Accept			application/json
 //	@Produce		application/json
 //	@Success		200	{object}	[]models.Redirect
 //	@Failure		403	{string}	Forbidden
 //	@Failure		401	{string}	Unauthorized
 //	@Failure		500	{string}	Failure	message
-//	@Router			/admin/ [get]
+//	@Router			/vr/ [get]
 //	@Security		AccessToken
 func GetAllRedirects(rdb *redis.Client) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {

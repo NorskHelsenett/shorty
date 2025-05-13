@@ -29,7 +29,7 @@ func (mwc *QrWriteCloser) Close() error {
 // @Summary	Get qr-code by id
 // @Schemes
 // @Description	gets qrcode by id
-// @Tags			admin
+// @Tags			vr
 // @Accept			application/json
 // @Produce		application/json
 // @Produce		image/png
@@ -38,7 +38,7 @@ func (mwc *QrWriteCloser) Close() error {
 // @Failure		403	{string}	Forbidden
 // @Failure		401	{string}	Unauthorized
 // @Failure		500	{string}	Failure	message
-// @Router			/admin/qr/{id} [get]
+// @Router			/vr/qr/{id} [get]
 // @Security		AccessToken
 func GenerateQRCode(rdb *redis.Client) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {

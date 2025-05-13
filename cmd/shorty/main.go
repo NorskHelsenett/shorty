@@ -26,9 +26,9 @@ import (
 )
 
 const (
-	defaultPort     = "8880"
-	defaultHostname = "localhost"
-	defaultOIDCClientID = "shortyfront"
+	defaultPort            = "8880"
+	defaultHostname        = "localhost"
+	defaultOIDCClientID    = "shortyfront"
 	defaultOIDCProviderURL = "http://dex.localtest.me:5556/dex"
 )
 
@@ -141,7 +141,7 @@ func setupRouter(rdb *redis.Client) *mux.Router {
 	r.HandleFunc("/", handlers.Redirect(rdb)).Methods("GET")
 	r.HandleFunc("", handlers.Redirect(rdb)).Methods("GET")
 
-	adminRoute := r.PathPrefix("/admin").Subrouter()
+	adminRoute := r.PathPrefix("/vr").Subrouter()
 	adminRoute.Use(middleware.AuthenticationMiddlewareWrapper(rdb))
 	adminRoute.Use(middleware.AddAdminStatusMiddlewareWrapper(rdb))
 
