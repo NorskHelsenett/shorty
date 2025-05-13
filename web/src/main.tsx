@@ -15,8 +15,8 @@ createRoot(document.getElementById("root")!).render(
       <AdminProvider>
         <Router>
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/admin" element={<AdminPage />} />
+            <Route path="/admin" element={<HomePage />} />
+            <Route path="/admin/user" element={<AdminPage />} />
           </Routes>
         </Router>
       </AdminProvider>

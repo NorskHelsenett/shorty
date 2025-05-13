@@ -1,18 +1,18 @@
-import { Tooltip } from 'react-tooltip';
-import { useAdminContext } from '../Hooks/authAdminContext';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useRef } from 'react';
-import './NavigationBar.css';
-import AuthenticationButtons from './AuthButton';
+import { Tooltip } from "react-tooltip";
+import { useAdminContext } from "../Hooks/authAdminContext";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useRef } from "react";
+import "./NavigationBar.css";
+import AuthenticationButtons from "./AuthButton";
 
 const NavigationBar: React.FC = () => {
   const isAdmin = useAdminContext();
   const location = useLocation();
   const navigate = useNavigate();
-  const isOnAdminPage = location.pathname === '/admin';
-  const link = isOnAdminPage ? '/' : '/admin';
-  const linkText = isOnAdminPage ? 'pi pi-home' : 'pi pi-key';
-  const tooltipText = isOnAdminPage ? 'Homepage' : 'Adminpage';
+  const isOnAdminPage = location.pathname === "/admin/user";
+  const link = isOnAdminPage ? "/admin" : "/admin/user";
+  const linkText = isOnAdminPage ? "pi pi-home" : "pi pi-key";
+  const tooltipText = isOnAdminPage ? "Homepage" : "Adminpage";
 
   const handleNavigation = () => {
     navigate(link);
@@ -21,9 +21,12 @@ const NavigationBar: React.FC = () => {
   const dialogRef = useRef<HTMLDialogElement | null>(null);
 
   const handleUserkeyClick = () => {
-    const accessKey = window.localStorage.getItem('ROCP_token')?.replace(/"/g, '') || 'No access key found';
+    const accessKey =
+      window.localStorage.getItem("ROCP_token")?.replace(/"/g, "") ||
+      "No access key found";
     if (dialogRef.current) {
-      const dialogContentElement = dialogRef.current?.querySelector('.dialog-content');
+      const dialogContentElement =
+        dialogRef.current?.querySelector(".dialog-content");
       if (dialogContentElement) {
         dialogContentElement.textContent = accessKey;
         dialogRef.current.showModal();
@@ -37,27 +40,28 @@ const NavigationBar: React.FC = () => {
 
   const handleCopy = async () => {
     if (!isAdmin) {
-      alert('You dont have the permission, you are not admin user!');
+      alert("You dont have the permission, you are not admin user!");
       return;
     }
     try {
-      const dialogContentElement = dialogRef.current?.querySelector('.dialog-content');
+      const dialogContentElement =
+        dialogRef.current?.querySelector(".dialog-content");
 
       if (!dialogContentElement) {
-        throw new Error('Could not find dialog-content');
+        throw new Error("Could not find dialog-content");
       }
 
-      const contentToCopy = dialogContentElement.textContent || '';
+      const contentToCopy = dialogContentElement.textContent || "";
 
       if (!contentToCopy.trim()) {
-        throw new Error('No content to copy');
+        throw new Error("No content to copy");
       }
 
       await navigator.clipboard.writeText(contentToCopy);
-      console.log('Copied to clipboard:', contentToCopy);
-      alert('Access key copied to clipboard!');
+      console.log("Copied to clipboard:", contentToCopy);
+      alert("Access key copied to clipboard!");
     } catch (error) {
-      console.error('Unable to copy to clipboard:', error);
+      console.error("Unable to copy to clipboard:", error);
     }
   };
 
@@ -69,26 +73,41 @@ const NavigationBar: React.FC = () => {
             className="nav-button"
             onClick={handleUserkeyClick}
             data-tooltip-id="userkey-button-tooltip"
-            data-tooltip-content={'Get your accessKey'}
+            data-tooltip-content={"Get your accessKey"}
           >
-            <i className={'pi pi-user'}> </i>
+            <i className={"pi pi-user"}> </i>
           </button>
         )}
         {isAdmin && (
-          <button className="nav-button" onClick={handleNavigation} data-tooltip-id="nav-button-tooltip" data-tooltip-content={tooltipText}>
+          <button
+            className="nav-button"
+            onClick={handleNavigation}
+            data-tooltip-id="nav-button-tooltip"
+            data-tooltip-content={tooltipText}
+          >
             <i className={linkText}></i>
           </button>
         )}
 
         <AuthenticationButtons></AuthenticationButtons>
-        <dialog className={'nav-userkey-dialog'} ref={dialogRef}>
-          <h3 style={{ textAlign: 'center', color: '#015945' }}>Your Access Key</h3>
-          <p className="dialog-content" style={{ wordWrap: 'break-word' }}></p>
+        <dialog className={"nav-userkey-dialog"} ref={dialogRef}>
+          <h3 style={{ textAlign: "center", color: "#015945" }}>
+            Your Access Key
+          </h3>
+          <p className="dialog-content" style={{ wordWrap: "break-word" }}></p>
           <div className="dialog-buttons">
-            <button onClick={handleCopy} data-tooltip-id="copy-userkey-button-tooltip" data-tooltip-content={'Copy your accessKey'}>
+            <button
+              onClick={handleCopy}
+              data-tooltip-id="copy-userkey-button-tooltip"
+              data-tooltip-content={"Copy your accessKey"}
+            >
               <i className="pi pi-copy" />
             </button>
-            <button onClick={handleCloseDialog} data-tooltip-id="close-tooltip" data-tooltip-content="Close">
+            <button
+              onClick={handleCloseDialog}
+              data-tooltip-id="close-tooltip"
+              data-tooltip-content="Close"
+            >
               <i className="pi pi-times"></i>
             </button>
           </div>
