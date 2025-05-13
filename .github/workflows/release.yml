@@ -109,7 +109,7 @@ jobs:
           # Update server chart version
           sed -i "s/^version:.*/version: $VERSION/" charts/shorty/Chart.yaml
           sed -i "s/^appVersion:.*/appVersion: $VERSION/" charts/shorty/Chart.yaml
-          sed -i "s/tag:.*/tag: $VERSION/" charts/shorty/values.yaml
+          sed -i "/server:/,/web:/ s/tag:.*/tag: $VERSION/" charts/shorty/values.yaml
 
 
       - name: Login to GitHub Container Registry for Helm
