@@ -148,12 +148,16 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.web.volumeMounts }}
           volumeMounts:
+            - name: tmp-dir
+              mountPath: /tmp
+          {{- with .Values.web.volumeMounts }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
-      {{- with .Values.web.volumes }}
       volumes:
+        - name: tmp-dir
+          emptyDir: {}
+      {{- with .Values.web.volumes }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.web.nodeSelector }}
