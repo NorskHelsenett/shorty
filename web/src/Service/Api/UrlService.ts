@@ -1,9 +1,10 @@
 
 import { UrlData } from '../../data/Types.ts';
 import { fetchWithToken } from "../Auth/Fetch.ts";
+import { API_URL } from '../config.ts';
 
 
-const urlAdminAddress = "http://localhost:8880/admin/";
+const urlAdminAddress = `${API_URL}/admin/`;
 const endpoint = urlAdminAddress;
 
 export async function getUrl(): Promise<UrlData[]> {
