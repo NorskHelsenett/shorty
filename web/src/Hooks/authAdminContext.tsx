@@ -13,7 +13,7 @@ const DEFAULT_REFRESH_INTERVAL = 1000 * 60 * 5; // 5 min
 // Provider
 export const AdminProvider = ({ children }: { children: ReactNode }) => {
   const { token }: IAuthContext = useContext(AuthContext);
-  const { data: isAdmin } = useSWR(["/api/admin", token], fetcher, {
+  const { data: isAdmin } = useSWR(["/api/vr", token], fetcher, {
     refreshInterval: DEFAULT_REFRESH_INTERVAL,
   }); //
 
@@ -33,7 +33,7 @@ export const useAdminContext = () => {
 
 const fetcher = async ([_path, token]: [string, string]) => {
   try {
-    const response = await axios.get(`${API_URL}/admin/`, {
+    const response = await axios.get(`${API_URL}/vr/`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const adminHeader = response.headers["x-is-admin"];

@@ -4,7 +4,7 @@ import { fetchWithToken } from "../Auth/Fetch.ts";
 import { API_URL } from '../config.ts';
 
 
-const urlAdminAddress = `${API_URL}/admin/`;
+const urlAdminAddress = `${API_URL}/vr/`;
 const endpoint = urlAdminAddress;
 
 export async function getUrl(): Promise<UrlData[]> {

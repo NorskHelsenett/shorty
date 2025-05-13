@@ -1,13 +1,12 @@
 import { fetchWithToken } from "../Auth/Fetch.ts";
 import { API_URL } from "../config.ts";
 
-const urlAdminUserAddress = `${API_URL}/admin/user`;
+const urlAdminUserAddress = `${API_URL}/vr/user`;
 
 
 export async function getAdminUsers(): Promise<string[]> {
     try {
       const response = await fetchWithToken<string[]>(urlAdminUserAddress);
-      console.log('Fetched admin users:', response);
       if (!response || response.length === 0) {
         if (!response) {
             console.info('!response')
@@ -28,9 +27,6 @@ export async function AddAdminUser(emailInput: string): Promise<void> {
 
 
   try {
-    console.log('Payload being sent:', body);
-    console.log('Endpoint being contacted:', urlAdminUserAddress);
-
     await fetchWithToken(urlAdminUserAddress, 'POST', {
       headers: {
         'Accept': 'application/json',
@@ -47,7 +43,6 @@ export async function AddAdminUser(emailInput: string): Promise<void> {
 
 export async function DeleteAdminUser  (email: string): Promise<void> {
 const url = urlAdminUserAddress + "/" + email;
-console.log("deleteAdminUser")
 
 try {
     await fetchWithToken(url, 'DELETE', {
