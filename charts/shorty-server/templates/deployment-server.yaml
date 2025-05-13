@@ -10,7 +10,7 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      {{- include "api.selectorLabels" . | nindent 6 }}-api
+      {{- include "api.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.server.podAnnotations }}
@@ -18,7 +18,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "api.selectorLabels" . | nindent 8 }}-api
+        {{- include "api.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.server.imagePullSecrets }}
       imagePullSecrets:
