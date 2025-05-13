@@ -1,21 +1,21 @@
-{{- if .Values.ingress.enabled -}}
+{{- if .Values.web.ingress.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "shorty-web.fullname" . }}
+  name: {{ include "web.fullname" . }}
   labels:
-    {{- include "shorty-web.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
+    {{- include "web.labels" . | nindent 4 }}
+  {{- with .Values.web.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  {{- with .Values.ingress.className }}
+  {{- with .Values.web.ingress.className }}
   ingressClassName: {{ . }}
   {{- end }}
-  {{- if .Values.ingress.tls }}
+  {{- if .Values.web.ingress.tls }}
   tls:
-    {{- range .Values.ingress.tls }}
+    {{- range .Values.web.ingress.tls }}
     - hosts:
         {{- range .hosts }}
         - {{ . | quote }}
@@ -24,7 +24,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    {{- range .Values.ingress.hosts }}
+    {{- range .Values.web.ingress.hosts }}
     - host: {{ .host | quote }}
       http:
         paths:
@@ -35,9 +35,9 @@ spec:
             {{- end }}
             backend:
               service:
-                name: {{ include "shorty-web.fullname" $ }}
+                name: {{ include "web.fullname" $ }}
                 port:
-                  number: {{ $.Values.service.port }}
+                  number: {{ $.Values.web.service.port }}
           {{- end }}
     {{- end }}
 {{- end }}
