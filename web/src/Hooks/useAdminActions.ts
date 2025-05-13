@@ -49,11 +49,9 @@ export function useAdminActions() {
             console.error('Failed to add new admin user:', error);
             let errorMessage = "An unexpected error occurred. Please try again later."
             if ((error as any).status === 409) {
-                // toast.error(`Email "${email}" already exists as an admin user.`);
                 errorMessage = `Email "${email}" already exists as an admin user.`;
             } else if ((error as any).status === 400) {
-                // toast.error('Invalid input. Pleas check the data and try agein');
-                errorMessage = 'Invalid input. Pleas check the data and try agein';
+                errorMessage = 'Invalid input. Pleas check the data and try again';
             }
 
             setFormMessage('error', errorMessage)
