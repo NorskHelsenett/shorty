@@ -107,9 +107,9 @@ jobs:
       - name: Update Helm chart versions
         run: |
           # Update server chart version
-          sed -i "s/^version:.*/version: $VERSION/" charts/shorty-server/Chart.yaml
-          sed -i "s/^appVersion:.*/appVersion: $VERSION/" charts/shorty-server/Chart.yaml
-          sed -i "s/tag:.*/tag: $VERSION/" charts/shorty-server/values.yaml
+          sed -i "s/^version:.*/version: $VERSION/" charts/shorty/Chart.yaml
+          sed -i "s/^appVersion:.*/appVersion: $VERSION/" charts/shorty/Chart.yaml
+          sed -i "s/tag:.*/tag: $VERSION/" charts/shorty/values.yaml
 
 
       - name: Login to GitHub Container Registry for Helm
@@ -121,6 +121,6 @@ jobs:
 
       - name: Package and push server Helm chart
         run: |
-          helm package ./charts/shorty-server
+          helm package ./charts/shorty
           helm push shorty-$VERSION.tgz ${{ env.CHARTS_REG }}
 

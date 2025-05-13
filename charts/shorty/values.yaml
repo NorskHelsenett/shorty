@@ -1,8 +1,98 @@
-# Default values for web.
+# Default values for server.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-# This will set the replicaset count more information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
+nameOverride: ""
+fullnameOverride: ""
+
+api:
+  hostname: "k.test.nhn.no"
+  oidc:
+    providerURL: ""
+    clientId: "shortyfront"
+  allowOrigins: ""
+
+  ingress:
+    enabled: true
+    className: "avi-ingress-class-internett"
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    tls: 
+      enabled: true
+      secretName: kort-tls
+
+
+server:
+  enabled: true
+  replicaCount: 1
+
+  image:
+    repository: ghcr.io/norskhelsenett/shorty/shorty-server
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "1.0.13"
+
+  imagePullSecrets: []
+
+
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: ""
+
+  podAnnotations: {}
+
+  podSecurityContext: 
+    runAsNonRoot: true
+    fsGroup: 2000
+    runAsUser: 1001
+    runAsGroup: 1001
+    supplementalGroups: [501]
+
+  securityContext: 
+    allowPrivilegeEscalation: false
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop:
+      - ALL
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 1001
+
+  service:
+    type: NodePort
+    port: 8880
+
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 0
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
 web:
   replicaCount: 1
 
@@ -102,7 +192,7 @@ web:
     minReplicas: 1
     maxReplicas: 100
     targetCPUUtilizationPercentage: 80
-    # targetMemoryUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 0
 
   # Additional volumes on the output Deployment definition.
   volumes: []
