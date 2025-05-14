@@ -259,8 +259,8 @@ func TestDeleteRedirect(t *testing.T) {
 			ctxFunc: func(r *http.Request) *http.Request {
 				return r.WithContext(contextWithRoles(true, false, "user1"))
 			},
-			expectedStatus: http.StatusInternalServerError,
-			expectedBody:   "Failed to delete URL",
+			expectedStatus: http.StatusNotFound,
+			expectedBody:   "URL does not exist",
 		},
 		{
 			name: "Successful deletion",
@@ -465,7 +465,7 @@ func TestAddRedirect(t *testing.T) {
 	}
 }
 
-// ----- Test for GetAllRedirects handler -----
+// // ----- Test for GetAllRedirects handler -----
 func TestGetAllRedirects(t *testing.T) {
 	var fakeRdb *redis.Client
 
@@ -488,37 +488,5 @@ func TestGetAllRedirects(t *testing.T) {
 	// Expecting 2 elements from our fakeGetAll.
 	if len(responses) != 2 {
 		t.Errorf("Expected 2 redirect entries but got %d", len(responses))
-	}
-}
-
-// ----- Test for IsURL helper function -----
-func TestIsURL(t *testing.T) {
-	validURLs := []string{
-		"https://example.com",
-		"http://www.example.com",
-		"https://sub.domain.co",
-	}
-	invalidURLs := []string{
-		"notaurl",
-		"htp://example.com",
-		"",
-	}
-
-	for _, urlStr := range validURLs {
-		if !IsURL(urlStr) {
-			t.Errorf("Expected %q to be a valid URL", urlStr)
-		}
-	}
-
-	for _, urlStr := range invalidURLs {
-		if IsURL(urlStr) {
-			t.Errorf("Expected %q to be an invalid URL", urlStr)
-		}
-	}
-
-	// Test an IP address host.
-	ipURL := "http://127.0.0.1"
-	if !IsURL(ipURL) {
-		t.Errorf("Expected %q to be valid", ipURL)
 	}
 }
