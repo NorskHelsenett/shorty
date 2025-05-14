@@ -101,7 +101,7 @@ func TestAddUserRedirect(t *testing.T) {
 			name:           "Invalid JSON in body",
 			isAdmin:        true,
 			body:           "this is not JSON",
-			expectedStatus: http.StatusInternalServerError, // due to ReadAll not failing but unmarshal fails
+			expectedStatus: http.StatusNotAcceptable,
 			expectedBody:   "Impossible to unmarshal body of request",
 		},
 		{
@@ -206,7 +206,7 @@ func TestGetAllUsersRedirect(t *testing.T) {
 			}
 
 			if tc.isAdmin {
-				var response []models.RedirectUser
+				var response []string
 				if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
 					t.Errorf("failed to decode JSON response: %v", err)
 				}
@@ -224,7 +224,7 @@ func TestDeleteUserRedirect(t *testing.T) {
 
 	// We need a router to set URL variables (mux.Vars).
 	router := mux.NewRouter()
-	router.HandleFunc("/admin/user/{id}", DeleteUserRedirect(fakeRdb))
+	router.HandleFunc("/admin/user/{id:.*}", DeleteUserRedirect(fakeRdb))
 
 	tests := []struct {
 		name           string
@@ -237,7 +237,7 @@ func TestDeleteUserRedirect(t *testing.T) {
 			name:           "Missing admin status returns unauthorized",
 			isAdmin:        false,
 			url:            "/admin/user/test@example.com",
-			expectedStatus: http.StatusForbidden, // in our code, non-admin gets forbidden
+			expectedStatus: http.StatusForbidden, // in code, non-admin gets forbidden
 			expectedBody:   "Forbidden",
 		},
 		{
