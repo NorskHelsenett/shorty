@@ -35,7 +35,7 @@ export function UrlForm({ onSubmit, message, clearMessage }: FormProps) {
   }, [message, clearMessage]);
 
   const onError = () => {
-    console.log("Wrong");
+    console.error("Wrong");
   };
 
   // Validation before sending data to app.tsx
@@ -51,13 +51,12 @@ export function UrlForm({ onSubmit, message, clearMessage }: FormProps) {
       }
 
       if (!isValidUrl(data.url)) {
-        console.log("url is not valid");
+        console.error("url is not valid");
         setError("url", {
           type: "error",
           message: "The provided URL is not valid. Please try again.",
         });
       } else {
-        console.log("Validation: OK");
         await onSubmit(data);
         reset();
       }

@@ -31,8 +31,7 @@ export function usePathActions(){
 
 
 /** send New data to API */
-    const handleOnFormsubmit = async ({ path, url }: UrlData) => {
-    console.log(path, url);
+    const handleOnFormsubmit = async ({ path, url }: UrlData) => {;
     try {
         await AddUrl(path, url);
         mutate('/api/get-urls');
@@ -56,7 +55,6 @@ export function usePathActions(){
     };
 
     const handleItemDelete = async ({ path }: UrlData) => {
-    console.log('HandleItemDelete:', path);
         try {
             await DeleteUrl(path);
             mutate('/api/get-urls');
@@ -69,7 +67,6 @@ export function usePathActions(){
 
     const handleItemUpdate = async ({ path, url }: UrlData) => {
         try {
-            console.log('HandleItemUpdate: path', path, ', url:', url);
             await PatchUrl(path, url);
             mutate('/api/get-urls');
             setListMessage('success', 'Path updated successfully!');

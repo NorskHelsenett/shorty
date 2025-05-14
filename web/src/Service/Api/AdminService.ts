@@ -50,7 +50,6 @@ try {
         'Accept': 'application/json',
     },
     });
-    console.log("Data deleted successfully")
 } catch (error) {
     console.error("Failed to delete Admin user:", error);
     throw error;

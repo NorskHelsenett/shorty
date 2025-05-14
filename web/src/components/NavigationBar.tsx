@@ -58,7 +58,6 @@ const NavigationBar: React.FC = () => {
       }
 
       await navigator.clipboard.writeText(contentToCopy);
-      console.log("Copied to clipboard:", contentToCopy);
       alert("Access key copied to clipboard!");
     } catch (error) {
       console.error("Unable to copy to clipboard:", error);

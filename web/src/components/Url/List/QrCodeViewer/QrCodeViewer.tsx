@@ -20,7 +20,6 @@ const qrCodeViewer: React.FC<QrCodeViewerProps> = ({
   };
 
   const downloadQrCode = () => {
-    console.log("downloadQrCode");
     const canvas = document.querySelector(
       "#qrcode-canvas"
     ) as HTMLCanvasElement;
@@ -38,7 +37,6 @@ const qrCodeViewer: React.FC<QrCodeViewerProps> = ({
   };
 
   const imageUrlPath = "k.nhn.no/" + imagePath;
-  console.log("imagePath", imagePath);
   const isNhnUrl = imagePath.url.includes("nhn");
 
   return (

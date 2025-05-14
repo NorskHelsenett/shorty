@@ -40,7 +40,6 @@ export function useAdminActions() {
     const handleAddAdminUser = async (email: string) => {
 
         try {
-            console.log(email);
             await AddAndUpdate(email);
             toast.success('Admin user added successfully!');
             setFormMessage('success', 'email is added as admin successfully!');

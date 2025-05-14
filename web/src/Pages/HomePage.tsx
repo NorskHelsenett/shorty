@@ -50,7 +50,7 @@ function App() {
     return <h3>You are unauthorized. Please log in.</h3>;
   }
   if (error) {
-    console.log("error start:", error);
+    console.error("error start:", error);
     return (
       <div className="center">
         <h3>Something unexpected happened. Try again later</h3>

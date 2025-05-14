@@ -59,7 +59,6 @@ export async function AddUrl(pathInput: string, urlInput: string): Promise<void>
           'Accept': 'application/json',
         },
       });
-      console.log("Data deleted successfully")
     } catch (error) {
       console.error("Failed to delete URL:", error);
       throw error;
