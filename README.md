@@ -3,8 +3,7 @@
 - Admin user management through email registration. A admin user can delete and modify all paths.
 - URL shortening service with QR code generation capabilities
 
-The web application is built with REACT, Vite and TypeScript.
-The server is built with GO.
+The web application is built using React, Vite, and TypeScript, while the server is developed in Go and uses Redis as its database.
 
 ## Features
 
@@ -36,16 +35,6 @@ The server is built with GO.
 ```bash
 go mod tidy
 swag init
-CGO_ENABLED=0 go build -ldflags "-w -extldflags '-static' -X github.com/NorskHelsenett/shorty/internal/main.Version=$SHORTY_VERSION" -o "dist/kort" main.go
-```
-3. Build and upload docker image
-```bash
-docker build . -t ncr.sky.nhn.no/nhn/kort:$SHORTY_VERSION
-docker push ncr.sky.nhn.no/nhn/kort:$SHORTY_VERSION
-```
-4. Cleanup
-```bash
-rm dist/kort
 ```
 
 ### Web
@@ -59,5 +48,13 @@ rm dist/kort
    ```
 3. Start the development server:
    ```bash
-   npm run dev or docker build
+   npm run dev or npm run build
    ```
+### Build containers
+```bash
+docker compose up
+```
+### Kubernetes
+```bash
+Helmcharts that are updated must have Redis and an identity provider.
+```
