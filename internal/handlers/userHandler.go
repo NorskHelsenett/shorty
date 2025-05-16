@@ -30,7 +30,7 @@ var (
 //		@Summary		Add admin user
 //		@Schemes
 //		@Description	adds a admin user
-//		@Tags			admin user
+//		@Tags			v1 user
 //		@Accept			application/json
 //		@Produce		application/json
 //		@Param			query	body		models.RedirectUser	true	"Query"
@@ -190,7 +190,7 @@ func GetAllUsersRedirect(rdb *redis.Client) http.HandlerFunc {
 //	@Summary	Delete admin user
 //	@Schemes
 //	@Description	delets a admin user by email
-//	@Tags			admin user
+//	@Tags			v1 user
 //	@Accept			application/json
 //	@Produce		application/json
 //	@Param			id	path		string	true	"Id"
