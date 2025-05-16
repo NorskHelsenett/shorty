@@ -102,9 +102,9 @@ web:
     # Overrides the image tag whose default is the chart appVersion.
     tag: "latest"
   env:
-    VITE_AUTH_URL: ""
-    VITE_API_URL: ""
-    VITE_REDIRECT_URI: ""
+    VITE_AUTH_URL: "http://localhost:5556"
+    VITE_API_URL: "http://localhost:8880"
+    VITE_REDIRECT_URI: "http://localhost:5173"
 
   # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   imagePullSecrets: []
