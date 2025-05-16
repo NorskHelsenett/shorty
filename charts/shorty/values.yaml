@@ -17,10 +17,9 @@ api:
     className: "avi-ingress-class-internett"
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
-    tls: 
+    tls:
       enabled: true
       secretName: kort-tls
-
 
 server:
   enabled: true
@@ -34,7 +33,6 @@ server:
 
   imagePullSecrets: []
 
-
   serviceAccount:
     # Specifies whether a service account should be created
     create: true
@@ -46,20 +44,20 @@ server:
 
   podAnnotations: {}
 
-  podSecurityContext: 
+  podSecurityContext:
     runAsNonRoot: true
     fsGroup: 2000
     runAsUser: 1001
     runAsGroup: 1001
     supplementalGroups: [501]
 
-  securityContext: 
+  securityContext:
     allowPrivilegeEscalation: false
     seccompProfile:
       type: RuntimeDefault
     capabilities:
       drop:
-      - ALL
+        - ALL
     readOnlyRootFilesystem: true
     runAsNonRoot: true
     runAsUser: 1001
@@ -68,7 +66,8 @@ server:
     type: NodePort
     port: 8880
 
-  resources: {}
+  resources:
+    {}
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
     # resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -95,7 +94,6 @@ server:
 
 web:
   replicaCount: 1
-
   # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
   image:
     repository: nginxinc/nginx-unprivileged
@@ -103,6 +101,10 @@ web:
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: "latest"
+  env:
+    VITE_AUTH_URL: ""
+    VITE_API_URL: ""
+    VITE_REDIRECT_URI: ""
 
   # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   imagePullSecrets: []
@@ -136,13 +138,13 @@ web:
     runAsGroup: 1001
     supplementalGroups: [501]
 
-  securityContext:  
+  securityContext:
     allowPrivilegeEscalation: false
     seccompProfile:
       type: RuntimeDefault
     capabilities:
       drop:
-      - ALL
+        - ALL
     readOnlyRootFilesystem: true
     runAsNonRoot: true
     runAsUser: 1001
@@ -159,7 +161,8 @@ web:
   ingress:
     enabled: false
     className: ""
-    annotations: {}
+    annotations:
+      {}
       # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
     hosts:
@@ -172,7 +175,8 @@ web:
     #    hosts:
     #      - chart-example.local
 
-  resources: {}
+  resources:
+    {}
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
     # resources, such as Minikube. If you do want to specify resources, uncomment the following
