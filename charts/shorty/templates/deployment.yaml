@@ -155,9 +155,12 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           env: 
-            - name: {{ .Values.web.env.VITE_AUTH_URL }}
-            - name: {{ .Values.web.env.VITE_API_URL }}
-            - name: {{ .Values.web.env.VITE_REDIRECT_URI }}
+            - name: {{ VITE_AUTH_URL }}
+              value: {{ .Values.web.env.VITE_AUTH_URL }}
+            - name: {{ VITE_API_URL }}
+              value: {{ .Values.web.env.VITE_API_URL }}
+            - name: {{ VITE_REDIRECT_URI }}
+              value: {{ .Values.web.env.VITE_REDIRECT_URI }}
       volumes:
         - name: tmp-dir
           emptyDir: {}
