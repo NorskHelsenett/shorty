@@ -189,7 +189,7 @@ func GetAllUsersRedirect(rdb *redis.Client) http.HandlerFunc {
 //
 //	@Summary	Delete admin user
 //	@Schemes
-//	@Description	delets a admin user by email
+//	@Description	deletes a admin user by email
 //	@Tags			v1 user
 //	@Accept			application/json
 //	@Produce		application/json

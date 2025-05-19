@@ -21,7 +21,58 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/admin/": {
+        "/qr/": {
+            "get": {
+                "description": "get qrcode by query",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "image/png"
+                ],
+                "tags": [
+                    "qr"
+                ],
+                "summary": "Get qrcode by query",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Query",
+                        "name": "q",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "file"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/": {
             "get": {
                 "security": [
                     {
@@ -36,7 +87,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "admin"
+                    "v1"
                 ],
                 "summary": "Get redirect",
                 "responses": {
@@ -45,7 +96,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Redirect"
+                                "$ref": "#/definitions/github_com_NorskHelsenett_shorty_internal_models.Redirect"
                             }
                         }
                     },
@@ -83,7 +134,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "admin"
+                    "v1"
                 ],
                 "summary": "Add redirect",
                 "parameters": [
@@ -93,7 +144,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Redirect"
+                            "$ref": "#/definitions/github_com_NorskHelsenett_shorty_internal_models.Redirect"
                         }
                     }
                 ],
@@ -101,7 +152,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/github_com_NorskHelsenett_shorty_internal_models.Response"
                         }
                     },
                     "401": {
@@ -131,7 +182,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/admin/qr/{id}": {
+        "/v1/qr/{id}": {
             "get": {
                 "security": [
                     {
@@ -147,7 +198,7 @@ const docTemplate = `{
                     "image/png"
                 ],
                 "tags": [
-                    "admin"
+                    "v1"
                 ],
                 "summary": "Get qr-code by id",
                 "parameters": [
@@ -187,7 +238,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/admin/user": {
+        "/v1/user": {
             "get": {
                 "security": [
                     {
@@ -211,7 +262,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.RedirectUser"
+                                "$ref": "#/definitions/github_com_NorskHelsenett_shorty_internal_models.RedirectUser"
                             }
                         }
                     },
@@ -244,7 +295,7 @@ const docTemplate = `{
                 "responses": {}
             }
         },
-        "/admin/user/{id}": {
+        "/v1/user/{id}": {
             "delete": {
                 "security": [
                     {
@@ -259,7 +310,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "admin user"
+                    "v1 user"
                 ],
                 "summary": "Delete admin user",
                 "parameters": [
@@ -275,7 +326,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.RedirectUser"
+                            "$ref": "#/definitions/github_com_NorskHelsenett_shorty_internal_models.RedirectUser"
                         }
                     },
                     "401": {
@@ -299,14 +350,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/admin/{id}": {
+        "/v1/{id}": {
             "delete": {
                 "security": [
                     {
                         "AccessToken": []
                     }
                 ],
-                "description": "delets a redirect by id",
+                "description": "deletes a redirect by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -314,7 +365,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "admin"
+                    "v1"
                 ],
                 "summary": "Delete redirect",
                 "parameters": [
@@ -330,7 +381,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/github_com_NorskHelsenett_shorty_internal_models.Response"
                         }
                     },
                     "401": {
@@ -367,7 +418,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "admin"
+                    "v1"
                 ],
                 "summary": "Updates redirect",
                 "parameters": [
@@ -377,7 +428,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Redirect"
+                            "$ref": "#/definitions/github_com_NorskHelsenett_shorty_internal_models.Redirect"
                         }
                     },
                     {
@@ -392,58 +443,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/qr/": {
-            "get": {
-                "description": "get qrcode by query",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json",
-                    "image/png"
-                ],
-                "tags": [
-                    "qr"
-                ],
-                "summary": "Get qrcode by query",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Query",
-                        "name": "q",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "file"
+                            "$ref": "#/definitions/github_com_NorskHelsenett_shorty_internal_models.Response"
                         }
                     },
                     "401": {
@@ -519,7 +519,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "models.Redirect": {
+        "github_com_NorskHelsenett_shorty_internal_models.Redirect": {
             "type": "object",
             "properties": {
                 "path": {
@@ -531,7 +531,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.RedirectUser": {
+        "github_com_NorskHelsenett_shorty_internal_models.RedirectUser": {
             "type": "object",
             "properties": {
                 "email": {
@@ -539,7 +539,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.Response": {
+        "github_com_NorskHelsenett_shorty_internal_models.Response": {
             "type": "object",
             "properties": {
                 "message": {
