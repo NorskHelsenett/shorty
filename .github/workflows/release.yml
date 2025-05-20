@@ -110,6 +110,7 @@ jobs:
           sed -i "s/^version:.*/version: $VERSION/" charts/shorty/Chart.yaml
           sed -i "s/^appVersion:.*/appVersion: $VERSION/" charts/shorty/Chart.yaml
           sed -i "/server:/,/web:/ s/tag:.*/tag: $VERSION/" charts/shorty/values.yaml
+          sed -i "/web:/,/allowed/ s/tag:.*/tag: $VERSION/" charts/shorty/values.yaml
 
 
       - name: Login to GitHub Container Registry for Helm
@@ -124,3 +125,4 @@ jobs:
           helm package ./charts/shorty
           helm push shorty-$VERSION.tgz ${{ env.CHARTS_REG }}
 
+ 

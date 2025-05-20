@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => {
   const ALLOWED_HOSTS = getEnv(process.env.VITE_ALLOWED_HOSTS || env.VITE_ALLOWED_HOSTS, "VITE_ALLOWED_HOSTS", ['127.0.0.1', 'localhost'])
 
   return {
-    base: "/",
+    base: "/admin/",
     plugins: [react()],
     preview: {
       port: 5173,
