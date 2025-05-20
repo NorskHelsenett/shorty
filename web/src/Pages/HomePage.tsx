@@ -47,7 +47,14 @@ function App() {
     : [];
 
   if (error && error.status == 401) {
-    return <h3>You are unauthorized. Please log in.</h3>;
+    return (
+      <>
+        <h3>You are unauthorized. Please log in.</h3>
+        <div className="login-button-container">
+          <AuthenticationButtons />
+        </div>
+      </>
+    );
   }
   if (error) {
     console.error("error start:", error);
