@@ -29,7 +29,7 @@ var (
 //
 //		@Summary		Add admin user
 //		@Schemes
-//		@Description	adds a admin user
+//		@Description	Adds a admin user
 //		@Tags			v1 user
 //		@Accept			application/json
 //		@Produce		application/json
@@ -39,7 +39,7 @@ var (
 //		@Failure		401		{string}	Unauthorized
 //	 	@Failure		409		{string}	Conflict
 //		@Failure		500		{string}	Failure	message
-
+//
 // @Router			/v1/user [post]
 // @Security		AccessToken
 func AddUserRedirect(rdb *redis.Client) http.HandlerFunc {
@@ -139,10 +139,10 @@ func AddUserRedirect(rdb *redis.Client) http.HandlerFunc {
 
 // Get all admin users
 //
-//	@Summary		Get all admin
+//	@Summary		Get all admins
 //	@Schemes
 //	@Description	Returns a list of all redirect entries configured for the admin panel.
-//	@Tags			admin user
+//	@Tags			v1 user
 //	@Accept			application/json
 //	@Produce		application/json
 //	@Success		200	{object}	[]models.RedirectUser

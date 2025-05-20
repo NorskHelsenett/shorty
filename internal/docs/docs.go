@@ -253,9 +253,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "admin user"
+                    "v1 user"
                 ],
-                "summary": "Get all admin",
+                "summary": "Get all admins",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -292,7 +292,60 @@ const docTemplate = `{
                         "AccessToken": []
                     }
                 ],
-                "responses": {}
+                "description": "Adds a admin user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "v1 user"
+                ],
+                "summary": "Add admin user",
+                "parameters": [
+                    {
+                        "description": "Query",
+                        "name": "query",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_NorskHelsenett_shorty_internal_models.RedirectUser"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_NorskHelsenett_shorty_internal_models.RedirectUser"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
             }
         },
         "/v1/user/{id}": {
@@ -302,7 +355,7 @@ const docTemplate = `{
                         "AccessToken": []
                     }
                 ],
-                "description": "delets a admin user by email",
+                "description": "deletes a admin user by email",
                 "consumes": [
                     "application/json"
                 ],

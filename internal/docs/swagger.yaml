@@ -303,18 +303,53 @@ paths:
             type: string
       security:
       - AccessToken: []
-      summary: Get all admin
+      summary: Get all admins
       tags:
-      - admin user
+      - v1 user
     post:
-      responses: {}
+      consumes:
+      - application/json
+      description: Adds a admin user
+      parameters:
+      - description: Query
+        in: body
+        name: query
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_NorskHelsenett_shorty_internal_models.RedirectUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_NorskHelsenett_shorty_internal_models.RedirectUser'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "409":
+          description: Conflict
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
       security:
       - AccessToken: []
+      summary: Add admin user
+      tags:
+      - v1 user
   /v1/user/{id}:
     delete:
       consumes:
       - application/json
-      description: delets a admin user by email
+      description: deletes a admin user by email
       parameters:
       - description: Id
         in: path
