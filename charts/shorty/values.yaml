@@ -26,7 +26,7 @@ server:
   replicaCount: 1
 
   image:
-    repository: ncr.sky.nhn.no/ghcr/norskhelsenett/shorty/shorty-server
+    repository: ghcr.io/norskhelsenett/shorty/shorty-server
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: "1.0.13"
@@ -97,7 +97,7 @@ web:
   replicaCount: 1
   # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
   image:
-    repository: ncr.sky.nhn.no/ghcr/norskhelsenett/shorty/shorty-web
+    repository: ghcr.io/norskhelsenett/shorty/shorty-web
     # This sets the pull policy for images.
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
