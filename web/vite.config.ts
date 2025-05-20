@@ -1,6 +1,17 @@
+/// <reference types="vite/client" />
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 
+
+function getEnv(variable: string | undefined, name: string, defaultValue: string[]): string[] {
+    if (!variable){
+        console.warn(`Enveroment variable ${name} is not set; using standard value: ${defaultValue}`)
+        return defaultValue;
+    }
+    return variable.split(',');
+}
+
+const ALLOWED_HOSTS = getEnv(import.meta.env.VITE_ALLOWED_HOSTS, "VITE_ALLOWED_HOSTS", ['127.0.0.1', 'localhost']);
 
 export default defineConfig({
  base: "/",
@@ -21,6 +32,6 @@ export default defineConfig({
   fs: {
     strict: true,
   },
-  allowedHosts: process.env.VITE_ALLOWED_HOSTS ? process.env.VITE_ALLOWED_HOSTS.split(',') : ['127.0.0.1', 'localhost'],
+  allowedHosts: ALLOWED_HOSTS
  },
 });
