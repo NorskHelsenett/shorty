@@ -165,6 +165,8 @@ spec:
               value: {{ include "api.url" .  }}
             - name: VITE_REDIRECT_URI
               value: {{ include "api.url" .  }}
+            - name: VITE_ALLOWED_HOSTS
+              value: {{ .Values.web.allowedHosts | default .Values.api.hostname | quote }}
       volumes:
         - name: tmp-dir
           emptyDir: {}

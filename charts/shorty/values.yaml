@@ -102,6 +102,8 @@ web:
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: "latest"
+  # Comma-separated list of hostnames that are allowed to access the web app
+  allowedHosts: ""
   env: {}
 
 

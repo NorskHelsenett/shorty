@@ -18,5 +18,9 @@ export default defineConfig({
     clientPort: 5173,
     protocol: 'ws',   
   },
+  fs: {
+    strict: true,
+  },
+  allowedHosts: process.env.VITE_ALLOWED_HOSTS ? process.env.VITE_ALLOWED_HOSTS.split(',') : ['127.0.0.1', 'localhost'],
  },
 });
