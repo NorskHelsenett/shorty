@@ -10,6 +10,7 @@ COPY . .
 
 RUN npm run build
 
+
 # Production environment
 FROM nginxinc/nginx-unprivileged:alpine
 
@@ -17,13 +18,12 @@ FROM nginxinc/nginx-unprivileged:alpine
 COPY --from=build /app/dist /usr/share/nginx/html/admin
 
 # Copy entrypoint script
-COPY docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
+COPY --chmod=555 docker-entrypoint.sh /docker-entrypoint.sh
 
 # Copy custom nginx config
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 80
+EXPOSE 8080
 
 # Use entrypoint script to replace environment variables at container start
 ENTRYPOINT ["/docker-entrypoint.sh"]
