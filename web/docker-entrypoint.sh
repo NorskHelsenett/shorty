@@ -1,18 +1,18 @@
 #!/bin/sh
-# Script to replace environment variables in the runtime config.js file
+# Script to generate runtime config.js file in a writable location
 
-# Replace values in the config.js file
-if [ ! -z "$VITE_AUTH_URL" ]; then
-  sed -i "s|AUTH_URL: \"[^\"]*\"|AUTH_URL: \"$VITE_AUTH_URL\"|g" /usr/share/nginx/html/admin/config.js
-fi
+# Create config directory if it doesn't exist
+mkdir -p /tmp/config
 
-if [ ! -z "$VITE_API_URL" ]; then
-  sed -i "s|API_URL: \"[^\"]*\"|API_URL: \"$VITE_API_URL\"|g" /usr/share/nginx/html/admin/config.js
-fi
-
-if [ ! -z "$VITE_REDIRECT_URI" ]; then
-  sed -i "s|REDIRECT_URI: \"[^\"]*\"|REDIRECT_URI: \"$VITE_REDIRECT_URI\"|g" /usr/share/nginx/html/admin/config.js
-fi
+# Generate a new config.js file with environment variables
+cat > /tmp/config/config.js << EOF
+// Runtime configuration - these values are replaced at deployment time
+window.RUNTIME_CONFIG = {
+  AUTH_URL: "${VITE_AUTH_URL:-http://localhost:5556/dex}",
+  API_URL: "${VITE_API_URL:-http://localhost:8880}",
+  REDIRECT_URI: "${VITE_REDIRECT_URI:-http://localhost:5173}"
+};
+EOF
 
 # Execute nginx
 exec "$@"
