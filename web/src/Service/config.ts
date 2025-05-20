@@ -8,7 +8,7 @@ function getEnv(variable: string | undefined, name: string, defaultValue: string
 
 
 // get environment from terminal
-export const AUTH_URL = getEnv(import.meta.env.VITE_AUTH_URL, "VITE_AUTH_URL", "http://localhost:5556");
+export const AUTH_URL = getEnv(import.meta.env.VITE_AUTH_URL, "VITE_AUTH_URL", "http://localhost:5556/dex");
 export const API_URL = getEnv(import.meta.env.VITE_API_URL,"VITE_API_URL", "http://localhost:8880");
 export const REDIRECT_URI = getEnv(import.meta.env.VITE_REDIRECT_URI, "VITE_REDIRECT_URI", "http://localhost:5173");
 
@@ -17,8 +17,8 @@ import {TAuthConfig} from "react-oauth2-code-pkce"
 
 export const AUTH_CONFIG: TAuthConfig = {
     clientId: "shortyfront",
-    authorizationEndpoint: `${AUTH_URL}/dex/auth`,
-    tokenEndpoint: `${AUTH_URL}/dex/token`,
+    authorizationEndpoint: `${AUTH_URL}/auth`,
+    tokenEndpoint: `${AUTH_URL}/token`,
     redirectUri: `${REDIRECT_URI}/admin`,
     scope: "openid profile email groups",
 }
