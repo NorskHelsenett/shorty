@@ -151,18 +151,26 @@ spec:
           volumeMounts:
             - name: tmp-dir
               mountPath: /tmp
+            - name: vite-temp-dir
+              mountPath: /app/node_modules/.vite-temp
+            - name: vite-dir
+              mountPath: /app/node_modules/.vite
           {{- with .Values.web.volumeMounts }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
           env: 
-            - name: {{ VITE_AUTH_URL }}
-              value: {{ .Values.web.env.VITE_AUTH_URL }}
-            - name: {{ VITE_API_URL }}
-              value: {{ .Values.web.env.VITE_API_URL }}
-            - name: {{ VITE_REDIRECT_URI }}
-              value: {{ .Values.web.env.VITE_REDIRECT_URI }}
+            - name: VITE_AUTH_URL
+              value: {{ .Values.api.oidc.providerURL | quote }}
+            - name: VITE_API_URL
+              value: {{ include "api.url" .  }}
+            - name: VITE_REDIRECT_URI
+              value: {{ include "api.url" .  }}
       volumes:
         - name: tmp-dir
+          emptyDir: {}
+        - name: vite-temp-dir
+          emptyDir: {}
+        - name: vite-dir
           emptyDir: {}
       {{- with .Values.web.volumes }}
         {{- toYaml . | nindent 8 }}

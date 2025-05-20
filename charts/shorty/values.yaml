@@ -8,7 +8,7 @@ fullnameOverride: ""
 api:
   hostname: "k.test.nhn.no"
   oidc:
-    providerURL: ""
+    providerURL: "https://auth.sky.nhn.no/dex"
     clientId: "shortyfront"
   allowOrigins: ""
 
@@ -26,7 +26,7 @@ server:
   replicaCount: 1
 
   image:
-    repository: ghcr.io/norskhelsenett/shorty/shorty-server
+    repository: ncr.sky.nhn.no/ghcr/norskhelsenett/shorty/shorty-server
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: "1.0.13"
@@ -93,18 +93,17 @@ server:
   affinity: {}
 
 web:
+  enabled: true
   replicaCount: 1
   # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
   image:
-    repository: nginxinc/nginx-unprivileged
+    repository: ncr.sky.nhn.no/ghcr/norskhelsenett/shorty/shorty-web
     # This sets the pull policy for images.
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: "latest"
-  env:
-    VITE_AUTH_URL: "http://localhost:5556"
-    VITE_API_URL: "http://localhost:8880"
-    VITE_REDIRECT_URI: "http://localhost:5173"
+  env: {}
+
 
   # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   imagePullSecrets: []
@@ -155,7 +154,7 @@ web:
     type: NodePort
     # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
     port: 80
-    containerPort: 8080
+    containerPort: 5173
 
   # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ingress:

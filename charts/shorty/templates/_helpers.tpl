@@ -113,3 +113,15 @@ Create the name of the service account to use
 {{- default "default" .Values.server.serviceAccount.name }}-web
 {{- end }}
 {{- end }}
+
+
+{{/*
+Create the url of the application
+*/}}
+{{- define "api.url" -}}
+{{- if .Values.api.ingress.tls -}}
+https://{{- .Values.api.hostname }}
+{{- else }}
+http://{{- .Values.api.hostname }}
+{{- end }}
+{{- end }}

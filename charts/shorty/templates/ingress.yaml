@@ -31,4 +31,13 @@ spec:
                 port:
                   number: {{ .Values.server.service.port }}
         {{- end }}
+        {{- if .Values.web.enabled }}
+          - path: /admin
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: {{ include "web.fullname" . }}
+                port:
+                  number: {{ .Values.web.service.port }}
+           {{- end }}
 {{- end }}
