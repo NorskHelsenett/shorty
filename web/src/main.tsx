@@ -2,7 +2,12 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { AuthProvider } from "react-oauth2-code-pkce";
 import { AdminProvider } from "./Hooks/authAdminContext.tsx";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  BrowserRouter,
+} from "react-router-dom";
 import "./App.css";
 import "./Index.css";
 import AdminPage from "./Pages/AdminPage.tsx";
@@ -13,12 +18,12 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <AuthProvider authConfig={AUTH_CONFIG}>
       <AdminProvider>
-        <Router>
+        <BrowserRouter basename="/admin">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/user" element={<AdminPage />} />
           </Routes>
-        </Router>
+        </BrowserRouter>
       </AdminProvider>
     </AuthProvider>
   </StrictMode>
