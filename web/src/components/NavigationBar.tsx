@@ -9,8 +9,8 @@ const NavigationBar: React.FC = () => {
   const isAdmin = useAdminContext();
   const location = useLocation();
   const navigate = useNavigate();
-  const isOnAdminPage = location.pathname === "/admin/user";
-  const link = isOnAdminPage ? "/admin" : "/admin/user";
+  const isOnAdminPage = location.pathname === "/user";
+  const link = isOnAdminPage ? "/" : "/user";
   const linkText = isOnAdminPage ? "pi pi-home" : "pi pi-key";
   const tooltipText = isOnAdminPage ? "Homepage" : "Adminpage";
 
