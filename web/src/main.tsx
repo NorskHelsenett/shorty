@@ -2,12 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { AuthProvider } from "react-oauth2-code-pkce";
 import { AdminProvider } from "./Hooks/authAdminContext.tsx";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  BrowserRouter,
-} from "react-router-dom";
+import { Route, Routes, BrowserRouter } from "react-router-dom";
 import "./App.css";
 import "./Index.css";
 import AdminPage from "./Pages/AdminPage.tsx";
