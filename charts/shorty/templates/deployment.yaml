@@ -4,34 +4,34 @@ kind: Deployment
 metadata:
   name: {{ include "api.fullname" . }}
   labels:
-    {{- include "api.labels" . | nindent 4 }}
+    {{ - include "api.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.server.autoscaling.enabled }}
+  {{ - if not .Values.server.autoscaling.enabled }}
   replicas: {{ .Values.server.replicaCount }}
-  {{- end }}
+  {{ - end }}
   selector:
     matchLabels:
-      {{- include "api.selectorLabels" . | nindent 6 }}
+      {{ - include "api.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.server.podAnnotations }}
+      {{ - with .Values.server.podAnnotations }}
       annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{ - toYaml . | nindent 8 }}
+      {{ - end }}
       labels:
-        {{- include "api.selectorLabels" . | nindent 8 }}
+        {{ - include "api.selectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.server.imagePullSecrets }}
+      {{ - with .Values.server.imagePullSecrets }}
       imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{ - toYaml . | nindent 8 }}
+      {{ - end }}
       serviceAccountName: {{ include "api.serviceAccountName" . }}
       securityContext:
-        {{- toYaml .Values.server.podSecurityContext | nindent 8 }}
+        {{ - toYaml .Values.server.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
-            {{- toYaml .Values.server.securityContext | nindent 12 }}
+            {{ - toYaml .Values.server.securityContext | nindent 12 }}
           image: "{{ .Values.server.image.repository }}:{{ .Values.server.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.server.image.pullPolicy }}
           ports:
@@ -53,20 +53,20 @@ spec:
               value: {{ .Values.api.hostname | quote }}
             - name: PORT
               value: {{ .Values.server.service.port | quote }}
-            {{- if .Values.api.oidc }}
-            {{- if .Values.api.oidc.providerURL }}
+            {{ - if .Values.api.oidc }}
+            {{ - if .Values.api.oidc.providerURL }}
             - name: OIDC_PROVIDER_URL
               value: {{ .Values.api.oidc.providerURL | quote }}
-            {{- end}}
-            {{- if .Values.api.oidc.clientId }}
+            {{ - end}}
+            {{ - if .Values.api.oidc.clientId }}
             - name: OIDC_CLIENT_ID
               value: {{ .Values.api.oidc.clientId | quote }}
-            {{- end}}            
-            {{- end}}
-            {{- if .Values.api.allowOrigins }}
+            {{ - end}}            
+            {{ - end}}
+            {{ - if .Values.api.allowOrigins }}
             - name: ALLOW_ORIGINS
               value: {{ .Values.api.allowOrigins | quote }}
-            {{- end}}
+            {{ - end}}
           livenessProbe:
             httpGet:
               path: /health
@@ -76,78 +76,78 @@ spec:
               path: /health
               port: {{ .Values.server.service.port }}
           resources:
-            {{- toYaml .Values.server.resources | nindent 12 }}
-      {{- with .Values.server.nodeSelector }}
+            {{ - toYaml .Values.server.resources | nindent 12 }}
+      {{ - with .Values.server.nodeSelector }}
       nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.server.affinity }}
+        {{ - toYaml . | nindent 8 }}
+      {{ - end }}
+      {{ - with .Values.server.affinity }}
       affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.server.tolerations }}
+        {{ - toYaml . | nindent 8 }}
+      {{ - end }}
+      {{ - with .Values.server.tolerations }}
       tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{ - toYaml . | nindent 8 }}
+      {{ - end }}
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "web.fullname" . }}
   labels:
-    {{- include "web.labels" . | nindent 4 }}
+    {{ - include "web.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.web.autoscaling.enabled }}
+  {{ - if not .Values.web.autoscaling.enabled }}
   replicas: {{ .Values.web.replicaCount }}
-  {{- end }}
+  {{ - end }}
   selector:
     matchLabels:
-      {{- include "web.selectorLabels" . | nindent 6 }}
+      {{ - include "web.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.web.podAnnotations }}
+      {{ - with .Values.web.podAnnotations }}
       annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{ - toYaml . | nindent 8 }}
+      {{ - end }}
       labels:
-        {{- include "web.labels" . | nindent 8 }}
-        {{- with .Values.web.podLabels }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
+        {{ - include "web.labels" . | nindent 8 }}
+        {{ - with .Values.web.podLabels }}
+        {{ - toYaml . | nindent 8 }}
+        {{ - end }}
     spec:
-      {{- with .Values.web.imagePullSecrets }}
+      {{ - with .Values.web.imagePullSecrets }}
       imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{ - toYaml . | nindent 8 }}
+      {{ - end }}
       serviceAccountName: {{ include "web.serviceAccountName" . }}
-      {{- with .Values.web.podSecurityContext }}
+      {{ - with .Values.web.podSecurityContext }}
       securityContext:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{ - toYaml . | nindent 8 }}
+      {{ - end }}
       containers:
         - name: {{ .Chart.Name }}
-          {{- with .Values.web.securityContext }}
+          {{ - with .Values.web.securityContext }}
           securityContext:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
+            {{ - toYaml . | nindent 12 }}
+          {{ - end }}
           image: "{{ .Values.web.image.repository }}:{{ .Values.web.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.web.image.pullPolicy }}
           ports:
             - name: http
               containerPort: {{ .Values.web.service.containerPort }}
               protocol: TCP
-          {{- with .Values.web.livenessProbe }}
+          {{ - with .Values.web.livenessProbe }}
           livenessProbe:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with .Values.web.readinessProbe }}
+            {{ - toYaml . | nindent 12 }}
+          {{ - end }}
+          {{ - with .Values.web.readinessProbe }}
           readinessProbe:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with .Values.web.resources }}
+            {{ - toYaml . | nindent 12 }}
+          {{ - end }}
+          {{ - with .Values.web.resources }}
           resources:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
+            {{ - toYaml . | nindent 12 }}
+          {{ - end }}
           volumeMounts:
             - name: tmp-dir
               mountPath: /tmp
@@ -155,9 +155,9 @@ spec:
               mountPath: /app/node_modules/.vite-temp
             - name: vite-dir
               mountPath: /app/node_modules/.vite
-          {{- with .Values.web.volumeMounts }}
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
+          {{ - with .Values.web.volumeMounts }}
+            {{ - toYaml . | nindent 12 }}
+          {{ - end }}
           env: 
             - name: VITE_AUTH_URL
               value: {{ .Values.api.oidc.providerURL | quote }}
@@ -174,18 +174,18 @@ spec:
           emptyDir: {}
         - name: vite-dir
           emptyDir: {}
-      {{- with .Values.web.volumes }}
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.web.nodeSelector }}
+      {{ - with .Values.web.volumes }}
+        {{ - toYaml . | nindent 8 }}
+      {{ - end }}
+      {{ - with .Values.web.nodeSelector }}
       nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.web.affinity }}
+        {{ - toYaml . | nindent 8 }}
+      {{ - end }}
+      {{ - with .Values.web.affinity }}
       affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.web.tolerations }}
+        {{ - toYaml . | nindent 8 }}
+      {{ - end }}
+      {{ - with .Values.web.tolerations }}
       tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{ - toYaml . | nindent 8 }}
+      {{ - end }}
