@@ -64,7 +64,7 @@ server:
 
   service:
     type: NodePort
-    port: 8880
+    port: 80
 
   resources:
     {}
