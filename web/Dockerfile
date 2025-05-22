@@ -1,5 +1,7 @@
 FROM node:22-alpine AS build
 
+RUN mkdir /app
+
 WORKDIR /app
 
 COPY package*.json ./
@@ -23,8 +25,7 @@ COPY --chmod=555 docker-entrypoint.sh /docker-entrypoint.sh
 # Copy custom nginx config
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 8080
-
+EXPOSE 5173
 # Use entrypoint script to replace environment variables at container start
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"] 
