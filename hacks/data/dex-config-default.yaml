@@ -59,7 +59,7 @@ staticClients:
   - id: shortyfront
     name: shortyfront
     redirectURIs:
-      - "http://localhost:5173/admin"
+      - "http://localhost:5173/admin/"
     # secret: ZXhkbXBsZS1hcHAtc2VdcmV0
     public: true
     scopes: [openid profile email groups]

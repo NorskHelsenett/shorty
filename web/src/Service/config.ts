@@ -55,6 +55,6 @@ export const AUTH_CONFIG: TAuthConfig = {
     clientId: "shortyfront",
     authorizationEndpoint: `${AUTH_URL}/auth`,
     tokenEndpoint: `${AUTH_URL}/token`,
-    redirectUri: `${REDIRECT_URI}/admin`,
+    redirectUri: `${REDIRECT_URI}/admin/`,
     scope: "openid profile email groups",
 }
