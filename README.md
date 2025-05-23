@@ -20,6 +20,8 @@ Shorty is a system for URL shortening with an admin panel for user management. T
 
 ## BUILD
 
+Make sure that you have installed Go, Node, and Swagger on your machine before proceeding with the next processes.
+
 1. Clone the repository:
 
    ```bash
@@ -27,6 +29,7 @@ Shorty is a system for URL shortening with an admin panel for user management. T
 
    ```
 ### Server
+
 1. Set version ```export SHORTY_VERSION=[version]```
 
 2. Build executable
@@ -40,7 +43,7 @@ docker compose up
 ```
 
 ### Web
-1. Navigate to the project directory:
+1. Navigate to the project web-directory:
    ```bash
    cd web
    ```
@@ -56,13 +59,15 @@ docker compose up
    ```bash
    npm run build
    ```
-   Alternatively, you can build the web container:
+   Alternatively, you can build and run the web container:
    ```bash
-   docker build . -t shorty-web:latest -p 5173
+   docker build -t shorty-web:latest .
+   ```
+   ```bash
+   docker run -p 5173 -t shorty-web:latest 
    ```
 
 ### Kubernetes
-```bash
-Helmcharts that are updated must have Redis and an identity provider.
-```
-Remember to set yours environments variables.
+
+- Helmcharts that are updated must have Redis and an identity provider.
+- Remember to set yours environments variables.
