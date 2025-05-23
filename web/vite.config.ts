@@ -7,22 +7,22 @@ import path from 'path'
 
 // Function to get array environment variables
 function getEnvArray(variable: string | undefined, name: string, defaultValue: string[]): string[] {
-    if (!variable){
-        console.warn(`Environment variable ${name} is not set; using standard value: ${defaultValue}`)
-        return defaultValue;
-    }
-    console.info(`Environment variable ${name} is set; using value: ${variable.split(',')}`)
-    return variable.split(',');
+  if (!variable) {
+    console.warn(`Environment variable ${name} is not set; using standard value: ${defaultValue}`)
+    return defaultValue;
+  }
+  console.info(`Environment variable ${name} is set; using value: ${variable.split(',')}`)
+  return variable.split(',');
 }
 
 // Function to get string environment variables
 function getEnvString(variable: string | undefined, name: string, defaultValue: string): string {
-    if (!variable){
-        console.warn(`Environment variable ${name} is not set; using standard value: ${defaultValue}`)
-        return defaultValue;
-    }
-    console.info(`Environment variable ${name} is set; using value: ${variable}`)
-    return variable;
+  if (!variable) {
+    console.warn(`Environment variable ${name} is not set; using standard value: ${defaultValue}`)
+    return defaultValue;
+  }
+  console.info(`Environment variable ${name} is set; using value: ${variable}`)
+  return variable;
 }
 
 // Generate runtime config file when running build
@@ -43,7 +43,7 @@ function generateRuntimeConfig(env: Record<string, string>) {
   // Write the runtime config file
   const configContent = `// Runtime configuration - these values can be replaced at deployment time
 window.RUNTIME_CONFIG = ${JSON.stringify(runtimeConfig, null, 2)};`;
-  
+
   fs.writeFileSync(path.join(publicDir, 'config.js'), configContent);
   console.log('Generated runtime config.js with current environment values');
 }
@@ -51,12 +51,12 @@ window.RUNTIME_CONFIG = ${JSON.stringify(runtimeConfig, null, 2)};`;
 export default defineConfig(({ mode, command }) => {
   // Load env files based on mode (.env, .env.production, etc)
   const env = loadEnv(mode, process.cwd(), '')
-  
+
   // If we're building the app, generate the runtime config
   if (command === 'build') {
     generateRuntimeConfig(env);
   }
-  
+
   // Get allowed hosts from environment variable or use default
   const ALLOWED_HOSTS = getEnvArray(process.env.VITE_ALLOWED_HOSTS || env.VITE_ALLOWED_HOSTS, "VITE_ALLOWED_HOSTS", ['127.0.0.1', 'localhost'])
 
@@ -68,7 +68,7 @@ export default defineConfig(({ mode, command }) => {
   };
 
   return {
-    base: "/admin/",
+    base: "/admin",
     plugins: [
       react(),
       // Custom plugin to inject runtime config during development
@@ -80,7 +80,7 @@ export default defineConfig(({ mode, command }) => {
             const runtimeScript = `<script>
               window.RUNTIME_CONFIG = ${JSON.stringify(runtimeEnvs, null, 2)};
             </script>`;
-            
+
             return html.replace('</head>', `${runtimeScript}</head>`);
           }
           return html;
@@ -98,7 +98,7 @@ export default defineConfig(({ mode, command }) => {
       origin: getEnvString(env.VITE_ORIGIN, "VITE_ORIGIN", "http://localhost:5173"),
       hmr: {
         clientPort: parseInt(getEnvString(env.VITE_CLIENT_PORT, "VITE_CLIENT_PORT", "5173")),
-        protocol: getEnvString(env.VITE_HMR_PROTOCOL, "VITE_HMR_PROTOCOL", "ws"),   
+        protocol: getEnvString(env.VITE_HMR_PROTOCOL, "VITE_HMR_PROTOCOL", "ws"),
       },
       fs: {
         strict: true,
