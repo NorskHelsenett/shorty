@@ -1,9 +1,7 @@
 # Shorty - URL Shortener and Admin Management System
 
-- Admin user management through email registration. A admin user can delete and modify all paths.
-- URL shortening service with QR code generation capabilities
+Shorty is a system for URL shortening with an admin panel for user management. The web application is built using React, Vite, and TypeScript, while the server is developed in Go and utilizes Redis as its database.
 
-The web application is built using React, Vite, and TypeScript, while the server is developed in Go and uses Redis as its database.
 
 ## Features
 
@@ -17,7 +15,7 @@ The web application is built using React, Vite, and TypeScript, while the server
 - Create shortened URLs for any given link
 - Delete existing shortcuts
 - Edit and modify saved URLs
-- Generate QR codes
+- Generate QR codes for short path
 - Download QR codes as images
 
 ## BUILD
@@ -36,6 +34,10 @@ The web application is built using React, Vite, and TypeScript, while the server
 go mod tidy
 swag init
 ```
+### Build backend containers
+```bash
+docker compose up
+```
 
 ### Web
 1. Navigate to the project directory:
@@ -48,13 +50,19 @@ swag init
    ```
 3. Start the development server:
    ```bash
-   npm run dev or npm run build
+   npm run dev
    ```
-### Build containers
-```bash
-docker compose up
-```
+   Or build the production version:
+   ```bash
+   npm run build
+   ```
+   Alternatively, you can build the web container:
+   ```bash
+   docker build . -t shorty-web:latest -p 5173
+   ```
+
 ### Kubernetes
 ```bash
 Helmcharts that are updated must have Redis and an identity provider.
 ```
+Remember to set yours environments variables.
