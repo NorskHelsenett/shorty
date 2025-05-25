@@ -67,6 +67,9 @@ docker compose up
    docker run -p 5173 -t shorty-web:latest 
    ```
 
+### Windows Setup Tip
+If you're setting up the project on Windows, make sure to convert 'docker-entrypoint.sh' to use **LF** (Unix-style) line endings instead of **CRLF**, to avoid execution issues in Linux containers.
+
 ### Kubernetes
 
 - Helmcharts that are updated must have Redis and an identity provider.
