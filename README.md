@@ -35,7 +35,7 @@ Make sure that you have installed Go, Node, and Swagger on your machine before p
 2. Build executable
 ```bash
 go mod tidy
-swag init
+swag init -g cmd/shorty/main.go --parseDependency --output internal/docs --parseInternal
 ```
 ### Build backend containers
 ```bash
