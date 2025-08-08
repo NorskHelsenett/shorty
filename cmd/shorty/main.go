@@ -187,6 +187,7 @@ func main() {
 
 	viper.SetDefault("OIDC_CLIENT_ID", defaultOIDCClientID)
 	viper.SetDefault("OIDC_PROVIDER_URL", defaultOIDCProviderURL)
+	viper.SetDefault("HOST", "https://k.nhn.no")
 	viper.SetDefault("SKIPISSUERCHECK", false)
 	viper.SetDefault("INSECURE_SKIP_SIGNATURE_CHECK", false)
 	viper.AutomaticEnv()

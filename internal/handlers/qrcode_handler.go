@@ -14,6 +14,7 @@ import (
 	"github.com/NorskHelsenett/ror/pkg/rlog"
 	"github.com/go-redis/redis/v8"
 	"github.com/gorilla/mux"
+	"github.com/spf13/viper"
 	"github.com/yeqown/go-qrcode/v2"
 	"github.com/yeqown/go-qrcode/writer/standard"
 )
@@ -24,6 +25,15 @@ type QrWriteCloser struct {
 
 func (mwc *QrWriteCloser) Close() error {
 	return nil
+}
+
+// getBaseURL returns the base URL from environment variable or default
+func getBaseURL() string {
+	baseURL := viper.GetString("BASE_URL")
+	if baseURL == "" {
+		baseURL = "https://k.nhn.no"
+	}
+	return baseURL
 }
 
 // @Summary	Get qr-code by id
@@ -50,7 +60,7 @@ func GenerateQRCode(rdb *redis.Client) http.HandlerFunc {
 		path, err := redisdb.GetURL(rdb, id)
 		shorturl := path
 		if len(path) != 0 {
-			shorturl = fmt.Sprintf("%s/%s", "https://k.nhn.no", id)
+			shorturl = fmt.Sprintf("%s/%s", getBaseURL(), id)
 		}
 		if err != nil {
 			rlog.Info("GenerateQRCode - Error in GetURL", rlog.Any("client", r.Host), rlog.Any("path", id), rlog.Any("to", path))

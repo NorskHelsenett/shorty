@@ -3,6 +3,7 @@ import { Tooltip } from "react-tooltip";
 import "./QrCodeViewer.css";
 import { QRCodeCanvas } from "qrcode.react";
 import { QrData } from "../../../../data/Types";
+import { API_URL } from "../../../../Service/config";
 
 interface QrCodeViewerProps {
   imagePath: QrData;
@@ -36,7 +37,7 @@ const qrCodeViewer: React.FC<QrCodeViewerProps> = ({
     document.body.removeChild(downloadLink);
   };
 
-  const imageUrlPath = "k.nhn.no/" + imagePath;
+  const imageUrlPath = API_URL + "/" + imagePath.path;
   const isNhnUrl = imagePath.url.includes("nhn");
 
   return (
@@ -61,7 +62,7 @@ const qrCodeViewer: React.FC<QrCodeViewerProps> = ({
             <i className="pi pi-times"></i>
           </button>
         </div>
-        <h4 id="dialog_title">k.nhn.no/{imagePath.path}</h4>
+        <h4 id="dialog_title">{API_URL + "/" + imagePath.path}</h4>
         <QRCodeCanvas
           value={imageUrlPath}
           id="qrcode-canvas"

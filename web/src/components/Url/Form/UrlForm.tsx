@@ -5,12 +5,14 @@ import { Tooltip } from "react-tooltip";
 import "./UrlForm.css";
 import { UrlData } from "../../../data/Types.ts";
 import { isValidUrl } from "../../UrlValidator.ts";
+import { API_URL } from "../../../Service/config.ts";
 
 interface FormProps {
   onSubmit: (data: UrlData) => void;
   message: { type: "success" | "error"; message: string | null };
   clearMessage: () => void;
 }
+const urlPath = API_URL + "/";
 
 export function UrlForm({ onSubmit, message, clearMessage }: FormProps) {
   const {
@@ -72,7 +74,7 @@ export function UrlForm({ onSubmit, message, clearMessage }: FormProps) {
       <p className="infoText">Enter the url you want to shorten</p>
       <form onSubmit={handleSubmit(onSubmitHandler, onError)}>
         <div className="inline-container">
-          <p>k.nhn.no/</p>
+          <p>{urlPath}</p>
           <input
             aria-label="Enter path"
             placeholder=" Path"
