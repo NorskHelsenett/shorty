@@ -232,6 +232,7 @@ export function ListField({
           <div className="button-container">
             {urls.length > rowsPerPage ? (
               <button
+                aria-label="Previous"
                 onClick={prevPage}
                 disabled={currentPage === 0}
                 data-tooltip-id="prev-tooltip"
@@ -254,6 +255,7 @@ export function ListField({
             </div>
             {urls.length > rowsPerPage ? (
               <button
+                aria-label="Next"
                 onClick={nextPage}
                 disabled={indexOfLastRow >= urls.length}
                 data-tooltip-id="next-tooltip"

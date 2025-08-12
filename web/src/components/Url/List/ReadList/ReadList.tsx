@@ -38,6 +38,7 @@ const ReadOnlyRows: React.FC<ReadOnlyRowsProps> = ({
         <div className="cell-breaweWord">{data.url}</div>
         <div className="list-item__actions">
           <button
+            aria-label="edit"
             data-tooltip-id="edit-tooltip"
             data-tooltip-content={modify ? "Edit line" : `owner: ${data.owner}`}
             onClick={() => onEdit(index)}
@@ -46,6 +47,7 @@ const ReadOnlyRows: React.FC<ReadOnlyRowsProps> = ({
             <i className={`pi ${modify ? " pi-pencil" : "pi-ban"}`}></i>
           </button>
           <button
+            aria-label="delete"
             data-tooltip-id="delete-tooltip"
             data-tooltip-content={
               modify ? "Delete line" : `owner: ${data.owner}`
@@ -56,6 +58,7 @@ const ReadOnlyRows: React.FC<ReadOnlyRowsProps> = ({
             <i className={`pi ${modify ? "pi-trash" : "pi-ban"}`}></i>
           </button>
           <button
+            aria-label="show QR code"
             data-tooltip-id="qrcode-tooltip"
             data-tooltip-content="Show QR-code"
             onClick={handleOnClick}

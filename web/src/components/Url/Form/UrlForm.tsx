@@ -108,6 +108,7 @@ export function UrlForm({ onSubmit, message, clearMessage }: FormProps) {
             )}
           </button>
           <button
+            aria-label="Reset form"
             type="button"
             onClick={() => {
               reset();
