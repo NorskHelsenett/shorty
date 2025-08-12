@@ -124,5 +124,39 @@ jobs:
         run: |
           helm package ./charts/shorty
           helm push shorty-$VERSION.tgz ${{ env.CHARTS_REG }}
+  Notify-slack:
+    name: Notify slack
+    runs-on: ubuntu-latest
+    needs: update-and-publish-charts
+    steps:
+      - name: Set version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
 
- 
+      - name: Notify Slack on new Release
+        uses: slackapi/slack-github-action@v1.22.0
+        with:
+          payload: |
+            {
+              "text": "🚀 New release available: *v${{ env.VERSION }}*",
+              "attachments": [
+                {
+                  "color": "#36a64f",
+                  "fields": [
+                    {
+                      "title": "Repository",
+                      "value": "<https://github.com/${{ github.repository }}|${{ github.repository }}>",
+                      "short": true
+                    },
+                    {
+                      "title": "Release Notes",
+                      "value": "${{ github.event.release.body || 'No description provided.' }}",
+                      "short": false
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
