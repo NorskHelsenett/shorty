@@ -128,6 +128,7 @@ jobs:
     name: Notify slack
     runs-on: ubuntu-latest
     needs: update-and-publish-charts
+    #if: "!contains(github.ref, '-')"
     steps:
       - name: Set version
         run: |
@@ -144,27 +145,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "🚀 *New release available: v${{ env.VERSION }}*"
-                  }
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Repository:*\n<https://github.com/${{ github.repository }}|${{ github.repository }}>"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Tag:*\n<https://github.com/${{ github.repository }}/releases/tag/v${{ env.VERSION }}|v${{ env.VERSION }}>"
-                    }
-                  ]
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "*Docker Images:*\n• <https://github.com/${{ github.repository }}/pkgs/container/shorty%2Fshorty-server|shorty-server:${{ env.VERSION }}>\n• <https://github.com/${{ github.repository }}/pkgs/container/shorty%2Fshorty-web|shorty-web:${{ env.VERSION }}>"
+                    "text": "🚀 *New release available:* <https://github.com/NorskHelsenett/shorty/releases/tag/v${{ env.VERSION }}|v${{ env.VERSION }}>"
                   }
                 }
               ]
