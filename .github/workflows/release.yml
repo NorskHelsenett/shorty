@@ -139,16 +139,7 @@ jobs:
         with:
           payload: |
             {
-              "text": "🚀 New release available: *v${{ env.VERSION }}*",
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "🚀 *New release available:* <https://github.com/NorskHelsenett/shorty/releases/tag/v${{ env.VERSION }}|v${{ env.VERSION }}>"
-                  }
-                }
-              ]
+              "text": "🚀 New release available: v${{ env.VERSION }} - https://github.com/NorskHelsenett/shorty/releases/tag/v${{ env.VERSION }}"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
