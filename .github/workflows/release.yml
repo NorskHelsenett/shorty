@@ -139,21 +139,33 @@ jobs:
           payload: |
             {
               "text": "🚀 New release available: *v${{ env.VERSION }}*",
-              "attachments": [
+              "blocks": [
                 {
-                  "color": "#36a64f",
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "🚀 *New release available: v${{ env.VERSION }}*"
+                  }
+                },
+                {
+                  "type": "section",
                   "fields": [
                     {
-                      "title": "Repository",
-                      "value": "<https://github.com/${{ github.repository }}|${{ github.repository }}>",
-                      "short": true
+                      "type": "mrkdwn",
+                      "text": "*Repository:*\n<https://github.com/${{ github.repository }}|${{ github.repository }}>"
                     },
                     {
-                      "title": "Release Notes",
-                      "value": "${{ github.event.release.body || 'No description provided.' }}",
-                      "short": false
+                      "type": "mrkdwn",
+                      "text": "*Tag:*\n<https://github.com/${{ github.repository }}/releases/tag/v${{ env.VERSION }}|v${{ env.VERSION }}>"
                     }
                   ]
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Docker Images:*\n• <https://github.com/${{ github.repository }}/pkgs/container/shorty%2Fshorty-server|shorty-server:${{ env.VERSION }}>\n• <https://github.com/${{ github.repository }}/pkgs/container/shorty%2Fshorty-web|shorty-web:${{ env.VERSION }}>"
+                  }
                 }
               ]
             }
