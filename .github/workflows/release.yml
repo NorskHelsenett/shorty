@@ -143,7 +143,7 @@ jobs:
           # Extract changelog entry for this version
           if [ -f "CHANGELOG.md" ]; then
             # Get content between version headers, escape for JSON
-            CHANGELOG_ENTRY=$(sed -n "/## \[$VERSION\]/,/^## \[/p" CHANGELOG.md | sed '$d' | tail -n +2 | sed '/^$/d' | head -5 | sed 's/^- /• /' | tr '\n' ' ' | sed 's/"/\\"/g')
+            CHANGELOG_ENTRY=$(sed -n "/## \[$VERSION\]/,/^## \[/p" CHANGELOG.md | sed '$d' | tail -n +2 | sed '/^$/d' | head -5 | sed 's/^- /• /' | sed 's/"/\\"/g' | tr '\n' '\\n')
             if [ -n "$CHANGELOG_ENTRY" ]; then
               echo "TAG_MESSAGE=$CHANGELOG_ENTRY" >> $GITHUB_ENV
             else
@@ -158,7 +158,7 @@ jobs:
         with:
           payload: |
             {
-              "text": "🚀 New release available: v${{ env.VERSION }}\n📝 ${{ env.TAG_MESSAGE }}\n\n🔗 https://github.com/NorskHelsenett/shorty/releases/tag/v${{ env.VERSION }}"
+              "text": "🚀 New release available: v${{ env.VERSION }}\n${{ env.TAG_MESSAGE }}\n\n🔗 https://github.com/NorskHelsenett/shorty/releases/tag/v${{ env.VERSION }}"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
