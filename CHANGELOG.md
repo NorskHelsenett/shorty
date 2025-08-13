@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [1.0.0-rc58] - 2025-08-13
+## [1.0.0-rc59] - 2025-08-13
 
 ### Changed
 - Updated Dockerfile to use Go 1.24-alpine for compatibility
