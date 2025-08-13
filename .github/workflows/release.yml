@@ -103,6 +103,8 @@ jobs:
         uses: azure/setup-helm@v3
         with:
           version: 'latest'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update Helm chart versions
         run: |
@@ -140,8 +142,8 @@ jobs:
           
           # Extract changelog entry for this version
           if [ -f "CHANGELOG.md" ]; then
-            # Get content between version headers
-            CHANGELOG_ENTRY=$(sed -n "/## \[$VERSION\]/,/^## \[/p" CHANGELOG.md | sed '$d' | tail -n +2 | sed '/^$/d' | head -10)
+            # Get content between version headers, escape for JSON
+            CHANGELOG_ENTRY=$(sed -n "/## \[$VERSION\]/,/^## \[/p" CHANGELOG.md | sed '$d' | tail -n +2 | sed '/^$/d' | head -5 | sed 's/^- /• /' | tr '\n' ' ' | sed 's/"/\\"/g')
             if [ -n "$CHANGELOG_ENTRY" ]; then
               echo "TAG_MESSAGE=$CHANGELOG_ENTRY" >> $GITHUB_ENV
             else
