@@ -128,18 +128,35 @@ jobs:
     name: Notify slack
     runs-on: ubuntu-latest
     needs: update-and-publish-charts
-    if: "!contains(github.ref, '-')"
+    #if: "!contains(github.ref, '-')"
     steps:
-      - name: Set version
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Set version and get changelog entry
         run: |
           VERSION=${GITHUB_REF#refs/tags/v}
           echo "VERSION=$VERSION" >> $GITHUB_ENV
+          
+          # Extract changelog entry for this version
+          if [ -f "CHANGELOG.md" ]; then
+            # Get content between version headers
+            CHANGELOG_ENTRY=$(sed -n "/## \[$VERSION\]/,/^## \[/p" CHANGELOG.md | sed '$d' | tail -n +2 | sed '/^$/d' | head -10)
+            if [ -n "$CHANGELOG_ENTRY" ]; then
+              echo "TAG_MESSAGE=$CHANGELOG_ENTRY" >> $GITHUB_ENV
+            else
+              echo "TAG_MESSAGE=Se CHANGELOG.md for details" >> $GITHUB_ENV
+            fi
+          else
+            echo "TAG_MESSAGE=No changelog available" >> $GITHUB_ENV
+          fi
+          
       - name: Notify Slack on new Release
         uses: slackapi/slack-github-action@v1.22.0
         with:
           payload: |
             {
-              "text": "🚀 New release available: v${{ env.VERSION }} - https://github.com/NorskHelsenett/shorty/releases/tag/v${{ env.VERSION }}"
+              "text": "🚀 New release available: v${{ env.VERSION }}\n📝 ${{ env.TAG_MESSAGE }}\n\n🔗 https://github.com/NorskHelsenett/shorty/releases/tag/v${{ env.VERSION }}"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
