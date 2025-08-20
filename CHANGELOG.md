@@ -13,27 +13,49 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ----
 
-## [1.0.0-rc69] - 2025-08-13
+## [1.0.0-rc70] - 2025-08-13
 
-- Environment: Test/QA only
+- Environment: Test
 - Description: Performance improvements and bug fixes for URL shortening service
-- Impact: Test teams, QA engineers
+- Impact: Test teams, QA engineers. TEST TEST TEST TEST
+TEST TEST TEST TEST
 
-#### Added
+### Added
 - Enhanced URL validation with better error messages
 - New metrics endpoint for monitoring URL creation rates
 - Improved logging for debugging URL resolution issues
 
-#### Changed  
+### Changed  
 - Updated Go runtime to 1.24-alpine for better performance
 - Optimized database queries for faster URL lookups
 - Enhanced Docker image size reduction (30% smaller)
 
-#### Fixed
+### Fixed
 - Fixed URL expiration not working correctly in test environments
 - Resolved memory leak in URL resolution service
 - Fixed container startup race condition
 
+## [1.0.0-rc69] - 2025-08-13
+
+- Environment: Test
+- Description: Performance improvements and bug fixes for URL shortening service
+- Impact: Test teams, QA engineers. TEST TEST TEST TEST
+TEST TEST TEST TEST
+
+### Added
+- Enhanced URL validation with better error messages
+- New metrics endpoint for monitoring URL creation rates
+- Improved logging for debugging URL resolution issues
+
+### Changed  
+- Updated Go runtime to 1.24-alpine for better performance
+- Optimized database queries for faster URL lookups
+- Enhanced Docker image size reduction (30% smaller)
+
+### Fixed
+- Fixed URL expiration not working correctly in test environments
+- Resolved memory leak in URL resolution service
+- Fixed container startup race condition
 
 ---
 
