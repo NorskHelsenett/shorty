@@ -143,7 +143,7 @@ jobs:
           # Extract changelog entry for this version
           if [ -f "CHANGELOG.md" ]; then
             # Get content between version headers, escape for JSON
-            CHANGELOG_ENTRY=$(sed -n "/## \[$VERSION\]/,/^## \[/p" CHANGELOG.md | sed '$d' |tail -n +2 | sed '/^$/d' | head -5 | sed 's/^- /• /' | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
+            CHANGELOG_ENTRY=$(sed -n "/## \[$VERSION\]/,/^## \[/p" CHANGELOG.md | sed '/^---$/d' | sed '/^#### /d' | sed '/^$/d' | head -5 | sed 's/^- /• /' | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
             if [ -n "$CHANGELOG_ENTRY" ]; then
               echo "TAG_MESSAGE=$CHANGELOG_ENTRY" >> $GITHUB_ENV
             else

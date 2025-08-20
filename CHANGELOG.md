@@ -13,7 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ----
 
-## [1.0.0-rc68] - 2025-08-13
+## [1.0.0-rc69] - 2025-08-13
 
 - Environment: Test/QA only
 - Description: Performance improvements and bug fixes for URL shortening service
