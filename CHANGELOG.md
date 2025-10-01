@@ -12,13 +12,30 @@ Must include:
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ----
+## [1.0.0-rc71] - 2025-10-01
+
+- Environment: Test
+- Description: Updatet go version and npm dependencies to secure versions
+- Impact: Test teams, QA engineers.
+
+### Changed
+- Updated Go to 1.25.1
+- updated npm dependencies:
+    - chalk: 5.6.2 (compromised version: 1.1.1)
+    - ansi-styles: 6.2.3 (compromised version: 6.2.2)
+    - supports-color: 10.2.2 (compromised version: 10.2.1)
+    - color-convert: 3.1.2 (compromised version: 3.1.1)
+    - color-name: 2.0.2 (compromised version: 2.0.1)
+    - debug: 4.4.3 (compromised version: 4.4.2)
+    - error-ex: 1.3.4 (compromised version: 1.3.3)
+    - is-arrayish: 0.3.4 (compromised version: 0.3.3)
 
 ## [1.0.0-rc70] - 2025-08-13
 
 - Environment: Test
 - Description: Performance improvements and bug fixes for URL shortening service
-- Impact: Test teams, QA engineers. TEST TEST TEST TEST
-TEST TEST TEST TEST
+- Impact: Test teams, QA engineers. 
+
 
 ### Added
 - Enhanced URL validation with better error messages
@@ -39,8 +56,7 @@ TEST TEST TEST TEST
 
 - Environment: Test
 - Description: Performance improvements and bug fixes for URL shortening service
-- Impact: Test teams, QA engineers. TEST TEST TEST TEST
-TEST TEST TEST TEST
+- Impact: Test teams, QA engineers.
 
 ### Added
 - Enhanced URL validation with better error messages
