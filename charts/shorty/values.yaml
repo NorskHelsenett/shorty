@@ -6,7 +6,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 api:
-  hostname: "k.test.nhn.no"
+  hostname: "k.nhn.no"
   oidc:
     providerURL: "https://auth.sky.nhn.no/dex"
     clientId: "shortyfront"
