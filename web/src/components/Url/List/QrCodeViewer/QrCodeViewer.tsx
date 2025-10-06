@@ -4,7 +4,6 @@ import "./QrCodeViewer.css";
 import { QRCodeCanvas } from "qrcode.react";
 import { QrData } from "../../../../data/Types";
 import { API_URL } from "../../../../Service/config";
-import nhnLogo from "/nhnlogo.png";
 
 interface QrCodeViewerProps {
   imagePath: QrData;
@@ -72,7 +71,7 @@ const qrCodeViewer: React.FC<QrCodeViewerProps> = ({
           imageSettings={
             isNhnUrl
               ? {
-                  src: nhnLogo,
+                  src: "/admin/nhnlogo.png",
                   height: 40,
                   width: 40,
                   excavate: true,
