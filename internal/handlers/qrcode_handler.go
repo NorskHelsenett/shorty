@@ -9,6 +9,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/NorskHelsenett/shorty/internal/media"
 	redisdb "github.com/NorskHelsenett/shorty/internal/redis"
 
 	"github.com/NorskHelsenett/ror/pkg/rlog"
@@ -145,14 +146,13 @@ func handleQrImageCreation(input string, w http.ResponseWriter) {
 	}
 
 	// Add the NHN logo for NHN domains
-	logoPath := "github.com/NorskHelsenett/shorty/internal/media/nhnlogo.png"
 	if strings.HasSuffix(u.Host, "nhn.no") {
 		// Verify logo file exists before trying to use it
-		if _, err := os.Stat(logoPath); err == nil {
+		if _, err := os.Stat(media.ImageFile); err == nil {
 			opts = append(opts, standard.WithLogoSizeMultiplier(2))
-			opts = append(opts, standard.WithLogoImageFilePNG(logoPath))
+			opts = append(opts, standard.WithLogoImageFilePNG(media.ImageFile))
 		} else {
-			rlog.Warn("NHN logo file not found, generating QR code without logo", rlog.Any("logoPath", logoPath))
+			rlog.Warn("NHN logo file not found, generating QR code without logo", rlog.Any("logoPath", media.ImageFile))
 		}
 	}
 

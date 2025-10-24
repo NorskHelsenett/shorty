@@ -13,6 +13,7 @@ import (
 	"github.com/NorskHelsenett/shorty/internal/config"
 	docs "github.com/NorskHelsenett/shorty/internal/docs"
 	"github.com/NorskHelsenett/shorty/internal/handlers"
+	"github.com/NorskHelsenett/shorty/internal/media"
 	"github.com/NorskHelsenett/shorty/internal/metrics"
 	"github.com/NorskHelsenett/shorty/internal/middleware"
 
@@ -199,6 +200,9 @@ func main() {
 	if version == "" {
 		version = "v1-develop"
 	}
+
+	media.Load()
+
 	rlog.Info(fmt.Sprintf("## Starting k.nhn.no version %s", version))
 
 	// initializes metrics
@@ -270,5 +274,6 @@ func main() {
 
 	<-ctx.Done()
 
+	media.Unload()
 	rlog.Info("Server stopped gracefully")
 }
