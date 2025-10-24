@@ -67,6 +67,9 @@ spec:
             - name: ALLOW_ORIGINS
               value: {{ .Values.api.allowOrigins | quote }}
             {{- end}}
+          volumeMounts:
+            - name: tmp-dir
+              mountPath: /tmp
           livenessProbe:
             httpGet:
               path: /health
@@ -77,6 +80,9 @@ spec:
               port: {{ .Values.server.service.port }}
           resources:
             {{- toYaml .Values.server.resources | nindent 12 }}
+      volumes:
+        - name: tmp-dir
+          emptyDir: {}
       {{- with .Values.server.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
