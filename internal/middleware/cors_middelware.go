@@ -3,14 +3,26 @@ package middleware
 import (
 	"net/http"
 	"slices"
+	"strings"
 
 	"github.com/NorskHelsenett/ror/pkg/rlog"
 )
 
+var allowedOrigins []string
+
+func LoadOrigins(allowedOriginsString string) {
+	if allowedOriginsString != "" {
+		allowedOrigins = strings.Split(allowedOriginsString, ";")
+		rlog.Info("CORS allowed origins loaded", rlog.Any("origins", allowedOrigins))
+	} else {
+		rlog.Warn("No CORS origins configured - ALLOW_ORIGINS environment variable is empty")
+	}
+}
+
 // CORSMiddleware handles Cross-Origin Resource Sharing (CORS) headers
 // It validates the Origin header against a list of allowed origins and
 // sets appropriate CORS headers for the response
-func CORSMiddleware(next http.Handler, allowedOrigins []string) http.Handler {
+func CORSMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		origin := r.Header.Get("Origin")
 
@@ -32,7 +44,9 @@ func CORSMiddleware(next http.Handler, allowedOrigins []string) http.Handler {
 
 			rlog.Debug("CORS headers set for origin", rlog.String("origin", origin))
 		} else if origin != "" {
-			rlog.Debug("CORS request from unauthorized origin", rlog.String("origin", origin))
+			rlog.Warn("CORS request from unauthorized origin",
+				rlog.String("origin", origin),
+				rlog.Any("allowedOrigins", allowedOrigins))
 		}
 
 		// Process the request

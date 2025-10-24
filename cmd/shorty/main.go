@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"strings"
 	"syscall"
 	"time"
 
@@ -130,8 +129,13 @@ func configureSwagger() {
 }
 
 func setupRouter(rdb *redis.Client) *mux.Router {
-	r := mux.NewRouter()
 
+	allowedOriginsString := viper.GetString("ALLOW_ORIGINS")
+	middleware.LoadOrigins(allowedOriginsString)
+
+	r := mux.NewRouter()
+	r.Use(middleware.RecoveryMiddleware)
+	r.Use(middleware.CORSMiddleware)
 	// metric
 	r.Handle("/metrics", promhttp.Handler())
 
@@ -218,16 +222,11 @@ func main() {
 	r := setupRouter(server.rdb)
 
 	// Get allowed origins for CORS with empty check
-	allowedOriginsString := viper.GetString("ALLOW_ORIGINS")
-	var allowedOrigins []string
-	if allowedOriginsString != "" {
-		allowedOrigins = strings.Split(allowedOriginsString, ";")
-	}
 
 	// Configure HTTP server with timeouts
 	url := fmt.Sprintf(":%s", listener.GetPort())
 	httpServer := &http.Server{
-		Handler:      middleware.RecoveryMiddleware(middleware.CORSMiddleware(r, allowedOrigins)),
+		Handler:      r,
 		Addr:         url,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 10 * time.Second,

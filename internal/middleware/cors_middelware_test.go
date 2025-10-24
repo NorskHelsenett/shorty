@@ -17,10 +17,10 @@ func dummyHandler(w http.ResponseWriter, r *http.Request) {
 
 // TestCORSMiddleware_AllowedOrigin_GET tests that a GET request from an allowed origin receives the correct CORS headers.
 func TestCORSMiddleware_AllowedOrigin_GET(t *testing.T) {
-	// Define allowed origins.
-	allowedOrigins := []string{"http://allowed.com"}
+	// Define allowed origins and load them globally.
+	LoadOrigins("http://allowed.com")
 	// Wrap the dummyHandler with the CORSMiddleware.
-	handler := CORSMiddleware(http.HandlerFunc(dummyHandler), allowedOrigins)
+	handler := CORSMiddleware(http.HandlerFunc(dummyHandler))
 
 	// Create a GET request with the Origin header set to an allowed origin.
 	req := httptest.NewRequest(http.MethodGet, "http://example.com/test", nil)
@@ -61,8 +61,8 @@ func TestCORSMiddleware_AllowedOrigin_GET(t *testing.T) {
 
 // TestCORSMiddleware_AllowedOrigin_OPTIONS tests that an OPTIONS (preflight) request from an allowed origin is handled correctly.
 func TestCORSMiddleware_AllowedOrigin_OPTIONS(t *testing.T) {
-	allowedOrigins := []string{"http://allowed.com"}
-	handler := CORSMiddleware(http.HandlerFunc(dummyHandler), allowedOrigins)
+	LoadOrigins("http://allowed.com")
+	handler := CORSMiddleware(http.HandlerFunc(dummyHandler))
 
 	// Create an OPTIONS request simulating a preflight request.
 	req := httptest.NewRequest(http.MethodOptions, "http://example.com/test", nil)
@@ -90,8 +90,8 @@ func TestCORSMiddleware_AllowedOrigin_OPTIONS(t *testing.T) {
 
 // TestCORSMiddleware_UnauthorizedOrigin tests that requests from a disallowed origin do not receive CORS headers.
 func TestCORSMiddleware_UnauthorizedOrigin(t *testing.T) {
-	allowedOrigins := []string{"http://allowed.com"}
-	handler := CORSMiddleware(http.HandlerFunc(dummyHandler), allowedOrigins)
+	LoadOrigins("http://allowed.com")
+	handler := CORSMiddleware(http.HandlerFunc(dummyHandler))
 
 	// Create a GET request with an Origin header that is not allowed.
 	req := httptest.NewRequest(http.MethodGet, "http://example.com/test", nil)
@@ -115,8 +115,8 @@ func TestCORSMiddleware_UnauthorizedOrigin(t *testing.T) {
 
 // TestCORSMiddleware_NoOriginHeader tests that requests without an Origin header do not have CORS headers added.
 func TestCORSMiddleware_NoOriginHeader(t *testing.T) {
-	allowedOrigins := []string{"http://allowed.com"}
-	handler := CORSMiddleware(http.HandlerFunc(dummyHandler), allowedOrigins)
+	LoadOrigins("http://allowed.com")
+	handler := CORSMiddleware(http.HandlerFunc(dummyHandler))
 
 	// Create a GET request without an Origin header.
 	req := httptest.NewRequest(http.MethodGet, "http://example.com/test", nil)
@@ -127,6 +127,31 @@ func TestCORSMiddleware_NoOriginHeader(t *testing.T) {
 	res := rr.Result()
 
 	// Expect that no CORS headers are set if the Origin header is missing.
+	if origin := res.Header.Get("Access-Control-Allow-Origin"); origin != "" {
+		t.Errorf("expected no Access-Control-Allow-Origin header, got %q", origin)
+	}
+	// Verify that the next handler was called.
+	body := rr.Body.String()
+	if !strings.Contains(body, "next handler called") {
+		t.Errorf("expected body to contain %q, got %q", "next handler called", body)
+	}
+}
+
+// TestCORSMiddleware_NoAllowedOrigins tests that when no origins are configured, no CORS headers are set.
+func TestCORSMiddleware_NoAllowedOrigins(t *testing.T) {
+	LoadOrigins("") // Empty string - no origins configured
+	handler := CORSMiddleware(http.HandlerFunc(dummyHandler))
+
+	// Create a GET request with an Origin header.
+	req := httptest.NewRequest(http.MethodGet, "http://example.com/test", nil)
+	req.Header.Set("Origin", "http://example.com")
+	rr := httptest.NewRecorder()
+
+	// Serve the request.
+	handler.ServeHTTP(rr, req)
+	res := rr.Result()
+
+	// Expect that no CORS headers are set when no origins are configured.
 	if origin := res.Header.Get("Access-Control-Allow-Origin"); origin != "" {
 		t.Errorf("expected no Access-Control-Allow-Origin header, got %q", origin)
 	}
