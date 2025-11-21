@@ -3,6 +3,8 @@ package redis
 import (
 	"context"
 	"errors"
+	"fmt"
+	"regexp"
 	"strings"
 	"time"
 
@@ -16,6 +18,12 @@ var (
 	ErrURLNotFound = errors.New("URL not found")
 	// ErrNoPathsFound is returned when no paths are found in the database
 	ErrNoPathsFound = errors.New("no paths found")
+	// ErrInvalidKey is returned when a key is not allowed
+	ErrInvalidKey = errors.New("invalid or reserved key")
+	// ErrInvalidValue is returned when a value is not allowed
+	ErrInvalidValue = errors.New("invalid redirect target")
+	// ErrSameKeyValue is returned when key and value are identical
+	ErrSameKeyValue = errors.New("key and redirect target cannot be the same")
 )
 
 // GetURL retrieves a URL by its key ID
@@ -36,6 +44,22 @@ func GetURL(rdb *redis.Client, keyID string) (string, error) {
 // Returns a descriptive message and any error that occurred
 func UpdateOrCreatePath(rdb *redis.Client, key string, newValue string, user string) (string, error) {
 	ctx := context.Background()
+
+	key = strings.TrimSpace(key)
+	key = strings.Trim(key, "/")
+
+	newValue = strings.TrimSpace(newValue)
+	newValue = strings.TrimSuffix(newValue, "/")
+
+	err := validatePathInput(key, newValue)
+	if err != nil {
+		rlog.Error("Path validation failed", err,
+			rlog.String("key", key),
+			rlog.String("value", newValue),
+			rlog.String("user", user))
+		return "", err
+	}
+
 	pathKey := "path:" + key
 
 	// Check if the key exists
@@ -153,4 +177,45 @@ func GetPathOwner(rdb *redis.Client, key string) (string, error) {
 	}
 
 	return createdBy, nil
+}
+
+func validatePathInput(key, newValue string) error {
+
+	key = strings.TrimSpace(key)
+	newValue = strings.TrimSpace(newValue)
+
+	// Key format validation - only allow alphanumeric, dash, underscore
+	validKeyPattern := regexp.MustCompile(`^[a-zA-Z0-9_-]+$`)
+	if !validKeyPattern.MatchString(key) {
+		return fmt.Errorf("%w: key can only contain letters, numbers, dash and underscore", ErrInvalidKey)
+	}
+
+	// Prevent keys starting with special characters
+	if strings.HasPrefix(key, "-") || strings.HasPrefix(key, "_") {
+		return fmt.Errorf("%w: key cannot start with dash or underscore", ErrInvalidKey)
+	}
+
+	reservedKeys := []string{"admin", "api", "health", "metrics", "swagger"}
+	for _, reserved := range reservedKeys {
+		if strings.EqualFold(key, reserved) {
+			return fmt.Errorf("%w: is a reserved key`%s`", ErrInvalidKey, key)
+		}
+	}
+
+	forbiddenTargets := []string{
+		"https://k.nhn.no/admin/user",
+		"https://k.nhn.no/admin",
+		"http://k.nhn.no/admin/user",
+		"http://k.nhn.no/admin",
+		"https://k.nhn.no/" + key,
+		"http://k.nhn.no/" + key,
+	}
+
+	for _, forbidden := range forbiddenTargets {
+		if strings.EqualFold(newValue, forbidden) {
+			return fmt.Errorf("%w: cannot redirect to `%s`", ErrInvalidKey, key)
+		}
+	}
+
+	return nil
 }

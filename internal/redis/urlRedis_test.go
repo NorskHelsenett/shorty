@@ -2,6 +2,7 @@ package redis
 
 import (
 	"errors"
+	"strings"
 	"testing"
 	"time"
 
@@ -481,5 +482,139 @@ func TestGetPathOwner(t *testing.T) {
 	// Ensure all expectations are met.
 	if err := mock.ExpectationsWereMet(); err != nil {
 		t.Errorf("there were unmet expectations: %v", err)
+	}
+}
+
+func TestValidatePathInput(t *testing.T) {
+	tests := []struct {
+		name        string
+		key         string
+		value       string
+		wantErr     bool
+		errContains string
+	}{
+		{
+			name:    "Valid path and URL",
+			key:     "test",
+			value:   "https://example.com",
+			wantErr: false,
+		},
+		{
+			name:        "Reserved key - admin",
+			key:         "admin",
+			value:       "https://example.com",
+			wantErr:     true,
+			errContains: "reserved key",
+		},
+		{
+			name:        "Reserved key - api (case insensitive)",
+			key:         "API",
+			value:       "https://example.com",
+			wantErr:     true,
+			errContains: "reserved key",
+		},
+		{
+			name:        "Reserved key - health",
+			key:         "health",
+			value:       "https://example.com",
+			wantErr:     true,
+			errContains: "reserved key",
+		},
+		{
+			name:        "Reserved key - metrics",
+			key:         "metrics",
+			value:       "https://example.com",
+			wantErr:     true,
+			errContains: "reserved key",
+		},
+		{
+			name:        "Reserved key - swagger",
+			key:         "swagger",
+			value:       "https://example.com",
+			wantErr:     true,
+			errContains: "reserved key",
+		},
+		{
+			name:        "Self-redirect HTTPS",
+			key:         "test",
+			value:       "https://k.nhn.no/test",
+			wantErr:     true,
+			errContains: "cannot redirect to",
+		},
+		{
+			name:        "Self-redirect HTTP",
+			key:         "test",
+			value:       "http://k.nhn.no/test",
+			wantErr:     true,
+			errContains: "cannot redirect to",
+		},
+		{
+			name:        "Forbidden target - admin user HTTPS",
+			key:         "test",
+			value:       "https://k.nhn.no/admin/user",
+			wantErr:     true,
+			errContains: "cannot redirect to",
+		},
+		{
+			name:        "Forbidden target - admin HTTPS",
+			key:         "test",
+			value:       "https://k.nhn.no/admin",
+			wantErr:     true,
+			errContains: "cannot redirect to",
+		},
+		{
+			name:        "Forbidden target - admin user HTTP",
+			key:         "test",
+			value:       "http://k.nhn.no/admin/user",
+			wantErr:     true,
+			errContains: "cannot redirect to",
+		},
+		{
+			name:        "Forbidden target - admin HTTP",
+			key:         "test",
+			value:       "http://k.nhn.no/admin",
+			wantErr:     true,
+			errContains: "cannot redirect to",
+		},
+		{
+			name:    "Valid URL with subdomain",
+			key:     "test",
+			value:   "https://sub.example.com",
+			wantErr: false,
+		},
+		{
+			name:    "Valid URL with path",
+			key:     "test",
+			value:   "https://example.com/path/to/resource",
+			wantErr: false,
+		},
+		{
+			name:    "Different key - not a loop",
+			key:     "prod",
+			value:   "https://k.nhn.no/test",
+			wantErr: false,
+		},
+		// NOTE: URL format validation (empty, invalid protocol, etc.)
+		// is handled by IsURL() in the handler layer
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := validatePathInput(tt.key, tt.value)
+
+			if tt.wantErr {
+				if err == nil {
+					t.Errorf("validatePathInput() expected error, got nil")
+					return
+				}
+				if tt.errContains != "" && !strings.Contains(err.Error(), tt.errContains) {
+					t.Errorf("validatePathInput() error = %v, want error containing %q", err, tt.errContains)
+				}
+			} else {
+				if err != nil {
+					t.Errorf("validatePathInput() unexpected error = %v", err)
+				}
+			}
+		})
 	}
 }

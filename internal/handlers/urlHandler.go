@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net"
@@ -239,13 +240,20 @@ func AddRedirect(rdb *redis.Client) http.HandlerFunc {
 		}
 		defer r.Body.Close()
 
-		// Validate URL
+		//  Basic validation - empty checks
 		if redirect.URL == "" {
 			rlog.Info("URL is empty")
 			http.Error(w, "URL cannot be empty", http.StatusBadRequest)
 			return
 		}
 
+		if redirect.Path == "" {
+			rlog.Info("Path is empty")
+			http.Error(w, "URL cannot be empty", http.StatusBadRequest)
+			return
+		}
+
+		// Basic URL format check (fast fail)
 		if !IsURL(redirect.URL) {
 			rlog.Info("Invalid URL format")
 			http.Error(w, "Invalid URL format", http.StatusBadRequest)
@@ -285,12 +293,25 @@ func AddRedirect(rdb *redis.Client) http.HandlerFunc {
 			return
 		}
 
+		count, err := getUserRedirectCountToday(rdb, userEmail)
+		if err != nil {
+			rlog.Error("Failed to check user redirect count", err)
+		} else if count > 3 {
+			rlog.Warn("user exceeded daily redirect limit", rlog.String("user", userEmail))
+			http.Error(w, "Daily redirect limit exceeded", http.StatusTooManyRequests)
+			return
+		}
+
 		// Create the redirect
 		message, err := UpdateOrCreatePath(rdb, redirect.Path, redirect.URL, userEmail)
 		if err != nil {
 			rlog.Error("Failed to create redirect", err)
 			http.Error(w, "Failed to create redirect", http.StatusInternalServerError)
 			return
+		}
+
+		if err := incrementUserRedirectCount(rdb, userEmail); err != nil {
+			rlog.Error("failed to increment user redirect count", err)
 		}
 
 		// Send successful response
@@ -376,11 +397,69 @@ func IsURL(str string) bool {
 		return false
 	}
 
+	// Only allow http and https protocols
+	if u.Scheme != "https" && u.Scheme != "http" {
+		rlog.Info("invalid protocol", rlog.String("scheme", u.Scheme))
+		return false
+	}
+
 	// Check if host is an IP address
 	address := net.ParseIP(u.Host)
+
+	// Block localhost and private IP ranges (security)
+	if address != nil {
+		if address.IsLoopback() || address.IsPrivate() {
+			rlog.Info("blocked private/localhost IP", rlog.String("ip", address.String()))
+			return false
+		}
+	}
+
+	// Block localhost by hostname
+	if strings.HasPrefix(strings.ToLower(u.Host), "localhost") {
+		rlog.Info("blocked localhost hostname")
+		return false
+	}
+
+	// Check if host is an IP address
 	if address == nil {
 		return strings.Contains(u.Host, ".")
 	}
 
 	return true
+}
+
+func getUserRedirectCountToday(rdb *redis.Client, userEmail string) (int, error) {
+	today := time.Now().Format("2006-01-02")
+	key := fmt.Sprintf("user:%s:count:%s", userEmail, today)
+
+	count, err := rdb.Get(context.Background(), key).Int()
+	if err == redis.Nil {
+		return 0, nil
+	}
+	if err != nil {
+		return 0, err
+	}
+
+	return count, err
+}
+
+func incrementUserRedirectCount(rdb *redis.Client, userEmail string) error {
+	ctx := context.Background()
+	today := time.Now().Format("2006-01-02")
+	key := fmt.Sprintf("user:%s:count:%s", userEmail, today)
+
+	// Increment counter (creates key if it doesn't exist)
+	err := rdb.Incr(ctx, key).Err()
+	if err != nil {
+		return err
+	}
+
+	// Set expiry to 48 hours (auto-cleanup)
+	err = rdb.Expire(ctx, key, 48*time.Hour).Err()
+	if err != nil {
+		return err
+	}
+
+	return nil
+
 }
