@@ -17,11 +17,11 @@ const AuthenticationButtons = () => {
   return (
     <>
       {auth.token ? (
-        <button onClick={handleLogout} data-tooltip-id="logout-tooltip" data-tooltip-content={'logout'}>
+        <button onClick={handleLogout} data-tooltip-id="logout-tooltip" data-tooltip-content={'logout'} title="logout">
           <i className="pi pi-sign-out"></i>
         </button>
       ) : (
-        <button onClick={handleLogin} data-tooltip-id="login-tooltip" data-tooltip-content={'login'}>
+        <button onClick={handleLogin} data-tooltip-id="login-tooltip" data-tooltip-content={'login'} title="login">
           <i className="pi pi-sign-in"></i>
         </button>
       )}

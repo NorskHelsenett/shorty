@@ -1,6 +1,6 @@
 module github.com/NorskHelsenett/shorty
 
-go 1.25.1
+go 1.26.1
 
 require (
 	github.com/NorskHelsenett/ror v1.2.2

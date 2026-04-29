@@ -137,6 +137,9 @@ func setupRouter(rdb *redis.Client) *mux.Router {
 	r := mux.NewRouter()
 	r.Use(middleware.RecoveryMiddleware)
 	r.Use(middleware.CORSMiddleware)
+	r.PathPrefix("/").HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	}).Methods(http.MethodOptions)
 	// metric
 	r.Handle("/metrics", promhttp.Handler())
 
