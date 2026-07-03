@@ -116,7 +116,7 @@ func handleQrImageCreation(input string, w http.ResponseWriter) {
 		rlog.Error("Failed to parse url", err, rlog.Any("url", input))
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
-		if _, err := w.Write([]byte(fmt.Sprintf(`{"error": "Invalid URL format: %s"}`, err.Error()))); err != nil {
+		if _, err := w.Write([]byte(`{"error": "Invalid URL format"}`)); err != nil {
 			rlog.Error("Failed to write error response", err)
 		}
 		return
@@ -165,7 +165,7 @@ func handleQrImageCreation(input string, w http.ResponseWriter) {
 		rlog.Error("Failed to save QR code image", err, rlog.Any("input", input))
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusInternalServerError)
-		if _, err := w.Write([]byte(fmt.Sprintf(`{"error": "Failed to generate QR code image: %s"}`, err.Error()))); err != nil {
+		if _, err := w.Write([]byte(`{"error": "Failed to generate QR code image"}`)); err != nil {
 			rlog.Error("Failed to write error response", err)
 			return
 		}
