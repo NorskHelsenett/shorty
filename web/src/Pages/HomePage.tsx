@@ -12,7 +12,7 @@ import { usePathActions } from "../Hooks/usePathActions.ts";
 import { UrlForm } from "../components/Url/Form/UrlForm.tsx";
 import AuthenticationButtons from "../components/AuthButton.tsx";
 
-const fetcher = async (_url: string) => {
+const fetcher = async () => {
   return getUrl();
 };
 

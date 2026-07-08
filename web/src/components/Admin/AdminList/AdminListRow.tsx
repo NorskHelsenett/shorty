@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useAdminContext } from '../../../Hooks/authAdminContext';
+import { useAdminContext } from '../../../Hooks/useAdminContext';
 import { Tooltip } from 'react-tooltip';
 import './AdminList.css';
 
@@ -42,6 +42,9 @@ const AdminListRows: React.FC<AdminListProps> = ({ data, onDelete, messagesByRow
               <div className="list-item-email">{email}</div>
               <div className="list-item-email-actions">
                 <button
+                  type="button"
+                  aria-label={`Delete admin user ${email}`}
+                  title="Delete admin user"
                   data-tooltip-id="delete-tooltip"
                   data-tooltip-content="Delete admin user"
                   onClick={() => onDelete(email, index)}

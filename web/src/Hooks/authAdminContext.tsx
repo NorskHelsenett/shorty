@@ -1,13 +1,12 @@
 // check if a user is admin
 
 import axios from "axios";
-import { ReactNode, createContext, useContext } from "react";
+import { ReactNode, useContext } from "react";
 import { AuthContext, IAuthContext } from "react-oauth2-code-pkce";
 import useSWR from "swr";
 import { API_URL } from "../Service/config";
+import { AdminContext } from "./adminContext";
 
-// Create context
-const AdminContext = createContext<boolean>(false);
 const DEFAULT_REFRESH_INTERVAL = 1000 * 60 * 5; // 5 min
 
 // Provider
@@ -24,14 +23,7 @@ export const AdminProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// hook
-export const useAdminContext = () => {
-  const context = useContext(AdminContext);
-
-  return context;
-};
-
-const fetcher = async ([_path, token]: [string, string]) => {
+const fetcher = async ([, token]: [string, string]) => {
   try {
     const response = await axios.get(`${API_URL}/v1/`, {
       headers: { Authorization: `Bearer ${token}` },

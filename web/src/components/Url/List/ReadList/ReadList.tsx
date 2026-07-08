@@ -18,7 +18,7 @@ const ReadOnlyRows: React.FC<ReadOnlyRowsProps> = ({
   onDelete,
   onQrClick,
 }) => {
-  var modify = data.modify;
+  const modify = data.modify;
   //console.log('admin:', isAdmin, 'owner:', data.owner, 'modify:', modify, 'data.Modify', data.modify);
 
   const handleOnClick = () => {

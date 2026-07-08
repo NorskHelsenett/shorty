@@ -43,29 +43,35 @@ export function UrlForm({ onSubmit, message, clearMessage }: FormProps) {
   // Validation before sending data to app.tsx
   const onSubmitHandler: SubmitHandler<UrlData> = async (data) => {
     try {
-      path: data.path = data.path.toLocaleLowerCase();
-      url: data.url = data.url.toLocaleLowerCase();
+      const normalizedPath = data.path.toLocaleLowerCase();
+      let normalizedUrl = data.url.toLocaleLowerCase();
 
       const regex = /^https?:\/\//i;
 
-      if (!regex.test(data.url)) {
-        data.url = `https://${data.url}`;
+      if (!regex.test(normalizedUrl)) {
+        normalizedUrl = `https://${normalizedUrl}`;
       }
 
-      if (!isValidUrl(data.url)) {
+      if (!isValidUrl(normalizedUrl)) {
         console.error("url is not valid");
         setError("url", {
           type: "error",
           message: "The provided URL is not valid. Please try again.",
         });
       } else {
-        await onSubmit(data);
+        await onSubmit({
+          ...data,
+          path: normalizedPath,
+          url: normalizedUrl,
+        });
         reset();
       }
     } catch (err) {
       console.error(err);
-      message.type = "error";
-      message.message = "An error occurred while submitting. Please try again.";
+      setError("root", {
+        type: "error",
+        message: "An error occurred while submitting. Please try again.",
+      });
     }
   };
 
@@ -122,6 +128,7 @@ export function UrlForm({ onSubmit, message, clearMessage }: FormProps) {
         <div className="clearField-container">
           {errors.path && <p className="warning">{errors.path.message}</p>}
           {errors.url && <p className="warning">{errors.url.message}</p>}
+          {errors.root && <p className="warning">{errors.root.message}</p>}
           {message.message && (
             <p className={message.type === "success" ? "success" : "warning"}>
               {message.message}

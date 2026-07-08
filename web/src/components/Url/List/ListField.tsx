@@ -58,8 +58,10 @@ export function ListField({
   const filteredUrls = urls.filter((item) =>
     item.path.toLowerCase().includes(search.toLowerCase())
   );
-  const indexOfFirstRow = currentPage * rowsPerPage;
-  const indexOfLastRow = (currentPage + 1) * rowsPerPage;
+  const maxPage = Math.max(0, Math.ceil(filteredUrls.length / rowsPerPage) - 1);
+  const visiblePage = Math.min(currentPage, maxPage);
+  const indexOfFirstRow = visiblePage * rowsPerPage;
+  const indexOfLastRow = (visiblePage + 1) * rowsPerPage;
   const currentRows = filteredUrls.slice(indexOfFirstRow, indexOfLastRow);
   const rowsPerPageOptions = [
     { id: "5", name: "5", value: 5 },
@@ -69,14 +71,14 @@ export function ListField({
 
   // Functions
   const nextPage = () => {
-    if (indexOfLastRow < urls.length) {
-      setCurrentPage(currentPage + 1);
+    if (visiblePage < maxPage) {
+      setCurrentPage((page) => page + 1);
     }
   };
 
   const prevPage = () => {
-    if (indexOfFirstRow > 0) {
-      setCurrentPage(currentPage - 1);
+    if (visiblePage > 0) {
+      setCurrentPage((page) => Math.max(0, page - 1));
     }
   };
 
@@ -118,7 +120,7 @@ export function ListField({
         showMessageForRow(rowIndex, "error", `Failed to delete path: ${path}.`);
       }
     } else {
-      handleCancel;
+      handleCancel();
     }
   };
 
@@ -150,13 +152,6 @@ export function ListField({
       return () => clearTimeout(timer);
     }
   }, [message, clearMessage]);
-
-  useEffect(() => {
-    // If we are on a page > 0 and the current page is empty, set currentPage to 0 (page 1)
-    if (currentPage > 0 && currentRows.length === 0) {
-      setCurrentPage(0);
-    }
-  }, [currentPage, currentRows]);
 
   if (Array.isArray(urls) && urls.length === 0) {
     return <p>NO URLS available, write the first one</p>;
@@ -234,7 +229,7 @@ export function ListField({
               <button
                 aria-label="Previous"
                 onClick={prevPage}
-                disabled={currentPage === 0}
+                disabled={visiblePage === 0}
                 data-tooltip-id="prev-tooltip"
                 data-tooltip-content="Previous"
               >
@@ -257,7 +252,7 @@ export function ListField({
               <button
                 aria-label="Next"
                 onClick={nextPage}
-                disabled={indexOfLastRow >= urls.length}
+                disabled={visiblePage >= maxPage}
                 data-tooltip-id="next-tooltip"
                 data-tooltip-content="Next"
               >

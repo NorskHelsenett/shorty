@@ -1,7 +1,7 @@
 import '../App.css';
 import './AdminPage.css';
 import { useContext } from 'react';
-import { useAdminContext } from '../Hooks/authAdminContext';
+import { useAdminContext } from '../Hooks/useAdminContext';
 import NavigationBar from '../components/NavigationBar';
 import AdminListRows from '../components/Admin/AdminList/AdminListRow';
 import { UseAdminData } from '../Hooks/useAdminData';

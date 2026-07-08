@@ -12,7 +12,7 @@ export async function getUrl(): Promise<UrlData[]> {
 }
 
 export async function AddUrl(pathInput: string, urlInput: string): Promise<void> {
-  
+
   const body = JSON.stringify({ path: pathInput, url: urlInput });
 
   try {
@@ -30,37 +30,37 @@ export async function AddUrl(pathInput: string, urlInput: string): Promise<void>
 }
 
 
-  export async function PatchUrl(pathInput: string, urlInput: string): Promise<any> {
-    const url = urlAdminAddress + pathInput;
-    const body = JSON.stringify({ path: pathInput, url: urlInput });
+export async function PatchUrl(pathInput: string, urlInput: string): Promise<unknown> {
+  const url = urlAdminAddress + pathInput;
+  const body = JSON.stringify({ path: pathInput, url: urlInput });
 
-    try{
-      const response = await fetchWithToken<any>(url, 'PATCH', {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body,
-      });
-      return response;
-    } catch (error) {
-      console.error('Error patching URL:', error);
-      throw error;
-    }
-
-  } 
-
-  export async function DeleteUrl(pathInput: string): Promise<void> {
-    const url = urlAdminAddress + pathInput;
-
-    try {
-      await fetchWithToken(url, 'DELETE', {
-        headers: {
-          'Accept': 'application/json',
-        },
-      });
-    } catch (error) {
-      console.error("Failed to delete URL:", error);
-      throw error;
-    }
+  try {
+    const response = await fetchWithToken<unknown>(url, 'PATCH', {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body,
+    });
+    return response;
+  } catch (error) {
+    console.error('Error patching URL:', error);
+    throw error;
   }
+
+}
+
+export async function DeleteUrl(pathInput: string): Promise<void> {
+  const url = urlAdminAddress + pathInput;
+
+  try {
+    await fetchWithToken(url, 'DELETE', {
+      headers: {
+        'Accept': 'application/json',
+      },
+    });
+  } catch (error) {
+    console.error("Failed to delete URL:", error);
+    throw error;
+  }
+}

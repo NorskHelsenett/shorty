@@ -1,5 +1,5 @@
 import { Tooltip } from "react-tooltip";
-import { useAdminContext } from "../Hooks/authAdminContext";
+import { useAdminContext } from "../Hooks/useAdminContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import "./NavigationBar.css";
@@ -69,8 +69,11 @@ const NavigationBar: React.FC = () => {
       <div className="nav-bar">
         {isAdmin && isOnAdminPage && (
           <button
+            type="button"
             className="nav-button"
             onClick={handleUserkeyClick}
+            aria-label="Show access key"
+            title="Show access key"
             data-tooltip-id="userkey-button-tooltip"
             data-tooltip-content={"Get your accessKey"}
           >
@@ -79,8 +82,11 @@ const NavigationBar: React.FC = () => {
         )}
         {isAdmin && (
           <button
+            type="button"
             className="nav-button"
             onClick={handleNavigation}
+            aria-label={tooltipText}
+            title={tooltipText}
             data-tooltip-id="nav-button-tooltip"
             data-tooltip-content={tooltipText}
           >
@@ -90,20 +96,26 @@ const NavigationBar: React.FC = () => {
 
         <AuthenticationButtons></AuthenticationButtons>
         <dialog className={"nav-userkey-dialog"} ref={dialogRef}>
-          <h3 style={{ textAlign: "center", color: "#015945" }}>
+          <h3 className="nav-userkey-title">
             Your Access Key
           </h3>
-          <p className="dialog-content" style={{ wordWrap: "break-word" }}></p>
+          <p className="dialog-content nav-userkey-content"></p>
           <div className="dialog-buttons">
             <button
+              type="button"
               onClick={handleCopy}
+              aria-label="Copy access key"
+              title="Copy access key"
               data-tooltip-id="copy-userkey-button-tooltip"
               data-tooltip-content={"Copy your accessKey"}
             >
               <i className="pi pi-copy" />
             </button>
             <button
+              type="button"
               onClick={handleCloseDialog}
+              aria-label="Close dialog"
+              title="Close dialog"
               data-tooltip-id="close-tooltip"
               data-tooltip-content="Close"
             >

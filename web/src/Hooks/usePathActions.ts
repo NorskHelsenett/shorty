@@ -6,52 +6,59 @@ import { useState } from "react";
 interface MessageState {
     formMessage: { type: 'success' | 'error'; message: string | null };
     listMessage: { type: 'success' | 'error'; message: string | null };
-  }
+}
 
-export function usePathActions(){
+type StatusError = Error & { status?: number };
+
+function hasStatus(error: unknown): error is StatusError {
+    return error instanceof Error && 'status' in error;
+}
+
+export function usePathActions() {
     const [messageState, setMessageState] = useState<MessageState>({
         formMessage: { type: 'success', message: null },
         listMessage: { type: 'success', message: null },
-      });
-    
+    });
+
     const setFormMessage = (type: 'success' | 'error', message: string | null) => {
-    setMessageState((prev) => ({
-        ...prev,
-        formMessage: { type, message },
-    }));
+        setMessageState((prev) => ({
+            ...prev,
+            formMessage: { type, message },
+        }));
     };
 
     const setListMessage = (type: 'success' | 'error', message: string | null) => {
-    setMessageState((prev) => ({
-        ...prev,
-        listMessage: { type, message },
-    }));
+        setMessageState((prev) => ({
+            ...prev,
+            listMessage: { type, message },
+        }));
     };
-    
 
 
-/** send New data to API */
-    const handleOnFormsubmit = async ({ path, url }: UrlData) => {;
-    try {
-        await AddUrl(path, url);
-        mutate('/api/get-urls');
-        setFormMessage('success', 'URL has been shortened successfully!');
-        // toast.success('URL have been shortened successfully!');
-    } catch (err) {
-        console.error(err);
-        let errorMessage = "An unexpected error occurred. Please try again later."
-        if ((err as any).status === 409) {
-            // toast.error("Path already exists as an admin user.");
-            errorMessage = `Path "${path}" already exists.`;
 
-        } else if ((err as any).status === 400) {
-            // toast.error('Invalid input. Pleas check the data and try again');
-            errorMessage = 'Invalid input. Please check the url and try again.';
+    /** send New data to API */
+    const handleOnFormsubmit = async ({ path, url }: UrlData) => {
+        ;
+        try {
+            await AddUrl(path, url);
+            mutate('/api/get-urls');
+            setFormMessage('success', 'URL has been shortened successfully!');
+            // toast.success('URL have been shortened successfully!');
+        } catch (err) {
+            console.error(err);
+            let errorMessage = "An unexpected error occurred. Please try again later."
+            if (hasStatus(err) && err.status === 409) {
+                // toast.error("Path already exists as an admin user.");
+                errorMessage = `Path "${path}" already exists.`;
 
+            } else if (hasStatus(err) && err.status === 400) {
+                // toast.error('Invalid input. Pleas check the data and try again');
+                errorMessage = 'Invalid input. Please check the url and try again.';
+
+            }
+
+            setFormMessage('error', errorMessage)
         }
-
-        setFormMessage('error', errorMessage)
-    }
     };
 
     const handleItemDelete = async ({ path }: UrlData) => {
@@ -79,12 +86,14 @@ export function usePathActions(){
     const resetFormMessage = () => setFormMessage('success', null);
     const resetListMessage = () => setListMessage('success', null);
 
-return { handleOnFormsubmit,
-    handleItemDelete,
-    handleItemUpdate,
-    messageState,
-    resetFormMessage,
-    resetListMessage,
-    setFormMessage,
-    setListMessage,};
+    return {
+        handleOnFormsubmit,
+        handleItemDelete,
+        handleItemUpdate,
+        messageState,
+        resetFormMessage,
+        resetListMessage,
+        setFormMessage,
+        setListMessage,
+    };
 }

@@ -1,28 +1,39 @@
 /* Closed state of the dialog   */
-.nav-userKey-dialog{
-    border: 1px solid #0f0101; /* Standard kant */
-    padding: 1em;
-    border-radius: 5px;
-    margin: auto; 
-  }
+.nav-userkey-dialog {
+  border: 1px solid #0f0101;
+  /* Standard kant */
+  padding: 1em;
+  border-radius: 5px;
+  margin: auto;
+}
 
-  dialog::backdrop {
-    backdrop-filter: blur(2px);
-  }
+.nav-userkey-title {
+  text-align: center;
+  color: #015945;
+}
+
+.nav-userkey-content {
+  overflow-wrap: break-word;
+}
+
+dialog::backdrop {
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}
 
 body:has(dialog[open]).nav-container {
-overflow: hidden;
+  overflow: hidden;
 }
 
 
 .nav-container {
-position: absolute;
-top: 10px;
-right: 10px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
-   
+
 .nav-bar {
-    width: 100%;
-    height: 40px; 
-    justify-content: space-between;
+  width: 100%;
+  height: 40px;
+  justify-content: space-between;
 }

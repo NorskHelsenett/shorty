@@ -5,38 +5,44 @@ import { useState } from "react";
 
 interface MessageState {
     formMessage: { type: 'success' | 'error'; message: string | null };
-    messagesByRow: ({ type: 'success' | 'error'; message: string | null }| undefined)[];
-  }
+    messagesByRow: ({ type: 'success' | 'error'; message: string | null } | undefined)[];
+}
+
+type StatusError = Error & { status?: number };
+
+function hasStatus(error: unknown): error is StatusError {
+    return error instanceof Error && 'status' in error;
+}
 
 export function useAdminActions() {
     const [messageState, setMessageState] = useState<MessageState>({
-            formMessage: { type: 'success', message: null },
-            messagesByRow: [],
-          });
-        
-        const setFormMessage = (type: 'success' | 'error', message: string | null) => {
+        formMessage: { type: 'success', message: null },
+        messagesByRow: [],
+    });
+
+    const setFormMessage = (type: 'success' | 'error', message: string | null) => {
         setMessageState((prev) => ({
             ...prev,
             formMessage: { type, message },
         }));
-        };
-    
-        const setMessageForRow = (index: number, type: 'success' | 'error', message: string | null) => {
-            setMessageState((prev) => {
-              const newMessages = [...prev.messagesByRow];
-              newMessages[index] = { type, message }; 
-              return { ...prev, messagesByRow: newMessages }; 
-            });
-          };
+    };
 
-        const clearMessageForRow = (index: number) => {
+    const setMessageForRow = (index: number, type: 'success' | 'error', message: string | null) => {
         setMessageState((prev) => {
             const newMessages = [...prev.messagesByRow];
-            newMessages[index] = undefined; 
+            newMessages[index] = { type, message };
             return { ...prev, messagesByRow: newMessages };
         });
-        };
-    
+    };
+
+    const clearMessageForRow = (index: number) => {
+        setMessageState((prev) => {
+            const newMessages = [...prev.messagesByRow];
+            newMessages[index] = undefined;
+            return { ...prev, messagesByRow: newMessages };
+        });
+    };
+
     const handleAddAdminUser = async (email: string) => {
 
         try {
@@ -47,9 +53,9 @@ export function useAdminActions() {
         } catch (error) {
             console.error('Failed to add new admin user:', error);
             let errorMessage = "An unexpected error occurred. Please try again later."
-            if ((error as any).status === 409) {
+            if (hasStatus(error) && error.status === 409) {
                 errorMessage = `Email "${email}" already exists as an admin user.`;
-            } else if ((error as any).status === 400) {
+            } else if (hasStatus(error) && error.status === 400) {
                 errorMessage = 'Invalid input. Pleas check the data and try again';
             }
 
@@ -58,7 +64,7 @@ export function useAdminActions() {
     };
 
 
-    const handleDeleteAdminUser = async (email: string, index: number)=> {
+    const handleDeleteAdminUser = async (email: string, index: number) => {
         try {
             const shouldRemove = confirm('Are you sure you want to delete admin user: "' + email + '"?');
 
@@ -67,7 +73,7 @@ export function useAdminActions() {
             setMessageForRow(index, 'success', 'email deleted successfully!');
         } catch (err) {
             console.error(err);
-            setMessageForRow(index ,'error','Failed to delete admin user.');
+            setMessageForRow(index, 'error', 'Failed to delete admin user.');
         }
     };
 
@@ -75,9 +81,9 @@ export function useAdminActions() {
 
 
     return {
-        handleAddAdminUser, 
+        handleAddAdminUser,
         handleDeleteAdminUser,
-         messageState,
+        messageState,
         resetFormMessage,
         setFormMessage,
         setMessageForRow,
