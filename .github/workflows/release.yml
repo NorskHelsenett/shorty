@@ -158,9 +158,9 @@ jobs:
       - name: Notify Slack on new Release
         uses: slackapi/slack-github-action@v2
         with:
+          webhook-type: incoming-webhook
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
           payload: |
             {
               "text": "🚀 New Shorty release: v${{ env.VERSION }}\n${{ env.TAG_MESSAGE }}\n\n🔗 https://github.com/NorskHelsenett/shorty/releases/tag/v${{ env.VERSION }}"
             }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
